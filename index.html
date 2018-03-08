@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Gothic NPC Designer</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				font-family: Monospace;
+				background-color: #000;
+				color: #fff;
+				margin: 0px;
+				overflow: hidden;
+			}
+			#info {
+				color: #fff;
+				position: absolute;
+				top: 10px;
+				width: 100%;
+				text-align: center;
+				z-index: 100;
+				display:block;
+			}
+			#info a, .button { color: #f00; font-weight: bold; text-decoration: underline; cursor: pointer }
+		</style>
+		<link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.css">
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" ></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+		
+	</head>
+
+	<body>
+		<div class="container">
+		  <div class="row">
+			  <div class="col-6">
+			  <div class="row" style="margin-bottom:5%;">
+			  <div class="col-8">
+				<h1>NPC Designer Beta</h1>
+				<ul class="list-group">
+				  <li class="list-group-item">
+						<div>
+					  <label id="label1" class="form-check-label" for="range0">Model ciała: Męski</label>
+					  </div>
+					  <input type="range" id="range0" min="1" max="2" value="2" step="1">
+				  </li>
+				  <li class="list-group-item"><div>
+					
+					<label id="label2" class="form-check-label" for="exampleCheck1">Model głowy</label>
+				  </div>
+				  <input type="range" id="range1" min="1" max="16" value="12" step="1">
+				  </li>
+				  <li class="list-group-item"><div>
+					
+					<label id="label3" class="form-check-label" for="exampleCheck1">Tekstura ciała</label>
+				  </div>
+				  <input type="range" id="range3" min="0" max="12" value="0" step="1">
+				  </li>
+				  <li class="list-group-item"><div>
+					
+					<label id="label4" class="form-check-label" for="exampleCheck1">Tekstura twarzy</label>
+				  </div>
+				  <input type="range" id="range4" min="0" max="259" value="0" step="1">
+				  </li>
+				  <li class="list-group-item"><div>
+					
+					<label id="label5" class="form-check-label" for="exampleCheck1">Grubość</label>
+				  </div>
+				  <input type="range" id="range2" min="0.7" max="1.3" value="1" step="0.1">
+				  </li>
+				</ul>
+				</div>
+				  </div>
+				  <div class="row">
+				  
+				  
+				  <div class="input-group">
+				  <div class="input-group-prepend">
+					<span class="input-group-text">Kod</span>
+				  </div>
+				  <textarea id="code" class="form-control" aria-label="With textarea"></textarea>
+				</div>
+			  </div>
+			  (C) 2017 Xar
+			  </div>
+			  
+			  <div id="render" class="col-6"></div>
+			</div>
+		</div>
+		<script src="js/three.min.js"></script>
+		<script src="js/loaders/TDSLoader.js"></script>
+		<script src="js/loaders/TGALoader.js"></script>
+		<script>
+
+			var container, controls;
+			var camera, scene, renderer;
+			var bodyid,headid;
+			var curr_bodytex, curr_headtex, curr_bodymodel, curr_headmodel;
+			var loaded = false;
+			init();
+			animate();
+			function refreshNPC()
+			{
+				var loader = new THREE.TDSLoader( );
+				var tgaloader = new THREE.TGALoader();
+				var texture = tgaloader.load( 'models/3ds/textures/Hum_Body_Naked_V'+document.getElementById("range3").value+'_C0.tga' );
+				var material = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture } );
+				loader.load( 'models/3ds/body/'+document.getElementById("range0").value+'.3ds', function ( object ) {
+					object.name = "body";
+					object.traverse( function ( child ) {
+
+						if ( child instanceof THREE.Mesh ) {
+							child.material = material;
+							
+							//child.material.normalMap = normal;
+						}
+
+					} );
+					bodyid = object.id;
+					scene.add( object );
+				});
+				var loader2 = new THREE.TDSLoader( );
+				var tgaloader = new THREE.TGALoader();
+				var texture2 = tgaloader.load( 'models/3ds/textures/faces/Hum_Head_V'+document.getElementById("range4").value+'_C0.tga' );
+				var material2 = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture2 } );
+				loader2.load( 'models/3ds/head/'+document.getElementById("range1").value+'.3ds', function ( object ) {
+					object.name = "head";
+					object.rotation.z = 1.57;
+					object.rotation.y = 1.57;
+					object.position.y = 0.68;
+					object.traverse( function ( child ) {
+
+						if ( child instanceof THREE.Mesh ) {
+							child.material = material2;
+							
+							//child.material.normalMap = normal;
+						}
+
+					} 
+					);
+					headid = object.id;
+					scene.add( object );
+				});
+				loaded = true;
+			}
+			function init() {
+
+				container = document.getElementById( 'render' );
+				//document.body.appendChild( container );
+
+				camera = new THREE.PerspectiveCamera( 60, window.innerWidth/2 / window.innerHeight, 0.1, 10 );
+				camera.position.z = 2;
+				camera.position.y = 0;
+				//controls = new THREE.TrackballControls( camera );
+
+				scene = new THREE.Scene();
+				scene.add( new THREE.HemisphereLight() );
+
+				//var directionalLight = new THREE.DirectionalLight( 0xffeedd );
+				//directionalLight.position.set( 0, 0, 2 );
+				//scene.add( directionalLight );
+				refreshNPC();
+				
+				curr_bodytex = 0;
+				curr_headtex = 0;
+				curr_bodymodel = document.getElementById("range0").value;
+				curr_headmodel = document.getElementById("range1").value;
+				renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth/2, window.innerHeight );
+				container.appendChild( renderer.domElement );
+				
+				window.addEventListener( 'resize', resize, false );
+				loaded = true;
+			}
+
+			function resize() {
+
+				camera.aspect = window.innerWidth/2 / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth/2, window.innerHeight );
+
+			}
+			function render() {
+				if (headid != -1 && bodyid != -1)
+				{
+				var bodymesh = new THREE.Object3D();
+				var headmesh = new THREE.Object3D();
+				for ( var i = 0, l = scene.children.length; i < l; i ++ ) 
+				{
+					var child = scene.children[ i ]; 
+					if ( child.id == bodyid ) 
+					{ 
+						bodymesh = child; 
+					}
+					else if ( child.id == headid ) 
+					{ 
+						headmesh = child; 
+					}
+				}
+				bodymesh.rotation.y -= 0.025;
+				headmesh.rotation.y -= 0.025;
+				bodymesh.scale.z = document.getElementById("range2").value;
+				var tgaloader = new THREE.TGALoader();
+				if (curr_bodytex != document.getElementById("range3").value)
+				{
+					var texture = tgaloader.load( 'models/3ds/textures/Hum_Body_Naked_V'+document.getElementById("range3").value+'_C0.tga' );
+					var material = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture } );
+					bodymesh.traverse( function ( child ) {
+
+							if ( child instanceof THREE.Mesh) {
+								child.material = material;
+							}
+
+						} );
+						curr_bodytex = document.getElementById("range3").value
+				}
+				if (curr_headtex != document.getElementById("range4").value)
+				{
+					var texture2 = tgaloader.load( 'models/3ds/textures/faces/Hum_Head_V'+document.getElementById("range4").value+'_C0.tga' );
+					var material2 = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture2 } );
+					headmesh.traverse( function ( child ) {
+
+							if ( child instanceof THREE.Mesh) {
+								child.material = material2;
+							}
+
+						} );
+						curr_headtex = document.getElementById("range4").value
+				}
+				if (curr_bodymodel != document.getElementById("range0").value || curr_headmodel != document.getElementById("range1").value)
+				{
+					if (loaded)
+					{
+						scene.remove(bodymesh);
+						scene.remove(headmesh);
+						bodyid = -1;
+						headid = -1;
+						loaded = false;
+						curr_bodymodel = document.getElementById("range0").value;
+						curr_headmodel = document.getElementById("range1").value;
+						setTimeout(refreshNPC,100);
+						//refreshNPC();
+					}
+				}
+				renderer.render( scene, camera );
+				}
+			}
+			function updateCode()
+			{
+				var v1, v2;
+				if (curr_bodymodel == 1)
+				{ 
+					v1 = "FEMALE"; 
+					document.getElementById( 'label1' ).innerHTML = "Model ciała: Żeński";
+				}
+				else 
+				{
+					v1 = "MALE";
+					document.getElementById( 'label1' ).innerHTML = "Model ciała: Męski";
+				}
+				
+				switch (curr_headmodel)
+				{
+					case '1':
+						v2 = "HUM_HEAD_BABE";
+						break;
+					case '2':
+						v2 = "HUM_HEAD_BABE1";
+						break;
+					case '3':
+						v2 = "HUM_HEAD_BABE2";
+						break;
+					case '4':
+						v2 = "HUM_HEAD_BABE3";
+						break;
+					case '5':
+						v2 = "HUM_HEAD_BABE4";
+						break;
+					case '6':
+						v2 = "HUM_HEAD_BABE5";
+						break;
+					case '7':
+						v2 = "HUM_HEAD_BABE6";
+						break;
+					case '8':
+						v2 = "HUM_HEAD_BABE7";
+						break;
+					case '9':
+						v2 = "HUM_HEAD_BABE8";
+						break;
+					case '10':
+						v2 = "HUM_HEAD_BABEHAIR";
+						break;
+					case '11':
+						v2 = "HUM_HEAD_BALD";
+						break;
+					case '12':
+						v2 = "HUM_HEAD_FATBALD";
+						break;
+					case '13':
+						v2 = "HUM_HEAD_FIGHTER";
+						break;
+					case '14':
+						v2 = "HUM_HEAD_PONY";
+						break;
+					case '15':
+						v2 = "HUM_HEAD_PSIONIC";
+						break;
+					case '16':
+						v2 = "HUM_HEAD_THIEF";
+						break;
+					default:
+						v2 = "HUM_HEAD_PONY";
+				}
+				document.getElementById( 'label2' ).innerHTML = "Model głowy: "+v2;
+				document.getElementById( 'label3' ).innerHTML = "Textura ciała: "+curr_bodytex;
+				document.getElementById( 'label4' ).innerHTML = "Textura twarzy: "+curr_headtex;
+				document.getElementById( 'label5' ).innerHTML = "Grubość: "+document.getElementById("range2").value;
+				document.getElementById( 'code' ).value = 'B_SetNpcVisual 	(self, '+v1+', "'+v2+'", '+curr_headtex+', '+curr_bodytex+', 0);\nMdl_SetModelFatness (self, '+document.getElementById("range2").value+');';
+			}
+			function animate() {
+				render();
+				updateCode();
+				requestAnimationFrame( animate );
+			}
+		</script>
+
+	</body>
+</html>
