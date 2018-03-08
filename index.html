@@ -103,9 +103,9 @@
 			{
 				var loader = new THREE.TDSLoader( );
 				var tgaloader = new THREE.TGALoader();
-				var texture = tgaloader.load( 'models/3ds/textures/Hum_Body_Naked_V'+document.getElementById("range3").value+'_C0.tga' );
+				var texture = tgaloader.load( 'models/textures/Hum_Body_Naked_V'+document.getElementById("range3").value+'_C0.tga' );
 				var material = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture } );
-				loader.load( 'models/3ds/body/body'+document.getElementById("range0").value+'.3ds', function ( object ) {
+				loader.load( 'models/body/body'+document.getElementById("range0").value+'.3ds', function ( object ) {
 					object.name = "body";
 					object.traverse( function ( child ) {
 
@@ -121,9 +121,9 @@
 				});
 				var loader2 = new THREE.TDSLoader( );
 				var tgaloader = new THREE.TGALoader();
-				var texture2 = tgaloader.load( 'models/3ds/textures/faces/Hum_Head_V'+document.getElementById("range4").value+'_C0.tga' );
+				var texture2 = tgaloader.load( 'models/textures/faces/Hum_Head_V'+document.getElementById("range4").value+'_C0.tga' );
 				var material2 = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture2 } );
-				loader2.load( 'models/3ds/head/'+document.getElementById("range1").value+'.3ds', function ( object ) {
+				loader2.load( 'models/head/'+document.getElementById("range1").value+'.3ds', function ( object ) {
 					object.name = "head";
 					object.rotation.z = 1.57;
 					object.rotation.y = 1.57;
@@ -205,7 +205,7 @@
 				var tgaloader = new THREE.TGALoader();
 				if (curr_bodytex != document.getElementById("range3").value)
 				{
-					var texture = tgaloader.load( 'models/3ds/textures/Hum_Body_Naked_V'+document.getElementById("range3").value+'_C0.tga' );
+					var texture = tgaloader.load( 'models/textures/Hum_Body_Naked_V'+document.getElementById("range3").value+'_C0.tga' );
 					var material = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture } );
 					bodymesh.traverse( function ( child ) {
 
@@ -218,7 +218,7 @@
 				}
 				if (curr_headtex != document.getElementById("range4").value)
 				{
-					var texture2 = tgaloader.load( 'models/3ds/textures/faces/Hum_Head_V'+document.getElementById("range4").value+'_C0.tga' );
+					var texture2 = tgaloader.load( 'models/textures/faces/Hum_Head_V'+document.getElementById("range4").value+'_C0.tga' );
 					var material2 = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture2 } );
 					headmesh.traverse( function ( child ) {
 
