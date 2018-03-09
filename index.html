@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>Gothic NPC Designer</title>
+		<title>Gothic II NPC Designer</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		</style>
@@ -14,7 +14,7 @@
 
 	<body>
 		<nav class="navbar navbar-light bg-light">
-			<a class="navbar-brand" href="#">Gothic Npc Designer</a>
+			<a class="navbar-brand" href="#">Gothic II Npc Designer</a>
 			</nav>
 		<div class="container">
 		
@@ -60,14 +60,14 @@
 						<div>
 					  <label id="label6" class="form-check-label" for="range0">Strój: </label>
 					  </div>
-					  <input type="range" id="range6" min="1" max="2" value="2" step="1">
+					  <input type="range" id="range6" min="0" max="12" value="0" step="1">
 				  </li>
 				  <li class="list-group-item"><div>
 					<div class="checkbox">
 					<label><input id="check1" type="checkbox" value="">Obrót postaci</label>
 					</div>
 					<div class="checkbox">
-					<label><input id="check2" type="checkbox" value="">Pokaż strój</label>
+					<label><input id="check2" type="checkbox" value="" checked>Pokaż strój</label>
 					</div>
 				  </div>
 				  
@@ -98,7 +98,8 @@
 			var container, controls;
 			var camera, scene, renderer;
 			var bodyid,headid;
-			var curr_bodytex, curr_headtex, curr_bodymodel, curr_headmodel;
+			var curr_bodytex, curr_headtex, curr_bodymodel, curr_headmodel, curr_outfit;
+			var outfit = true;
 			var loaded = false;
 			init();
 			animate();
@@ -106,6 +107,38 @@
 			{
 				var loader = new THREE.TDSLoader( );
 				var tgaloader = new THREE.TGALoader();
+				if (document.getElementById("range6").value > 0 && outfit == true)
+				{
+					var addtexture = tgaloader.load( 'models/textures/armors/armor'+document.getElementById("range6").value+'_add.tga' );
+					var addmaterial = new THREE.MeshPhongMaterial( { color: 0xffffff, map: addtexture } );
+					var bodytexture = tgaloader.load( 'models/textures/Hum_Body_Naked_V'+document.getElementById("range3").value+'_C0.tga' );
+					var bodymaterial = new THREE.MeshPhongMaterial( { color: 0xffffff, map: bodytexture } );
+					var texture = tgaloader.load( 'models/textures/armors/armor'+document.getElementById("range6").value+'.tga' );
+					var material = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture } );
+					loader.load( 'models/armors/armor'+document.getElementById("range6").value+'.3ds', function ( object ) {
+						object.name = "body";
+						object.traverse( function ( child ) {
+
+							if ( child instanceof THREE.Mesh ) {
+								if (child.material.name == "BODYMATERIAL")
+								{
+									child.material = bodymaterial;
+								}else if (child.material.name == "ADD_MATERIAL")
+								{
+									child.material = addmaterial;
+								}
+								else
+								{
+									child.material = material;
+								}
+							}
+
+						} );
+						bodyid = object.id;
+						scene.add( object );
+					});
+				}else
+				{
 				var texture = tgaloader.load( 'models/textures/Hum_Body_Naked_V'+document.getElementById("range3").value+'_C0.tga' );
 				var material = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture } );
 				loader.load( 'models/body/body'+document.getElementById("range0").value+'.3ds', function ( object ) {
@@ -113,13 +146,17 @@
 					object.traverse( function ( child ) {
 
 						if ( child instanceof THREE.Mesh ) {
-							child.material = material;
+							if (child.material.name == "BODYMATERIAL")
+							{
+								child.material = material;
+							}
 						}
 
 					} );
 					bodyid = object.id;
 					scene.add( object );
 				});
+				}
 				var loader2 = new THREE.TDSLoader( );
 				var tgaloader = new THREE.TGALoader();
 				var texture2 = tgaloader.load( 'models/textures/faces/Hum_Head_V'+document.getElementById("range4").value+'_C0.tga' );
@@ -155,6 +192,7 @@
 				curr_headtex = 0;
 				curr_bodymodel = document.getElementById("range0").value;
 				curr_headmodel = document.getElementById("range1").value;
+				curr_outfit = document.getElementById("range6").value;
 				renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth/4, window.innerHeight-100 );
@@ -197,19 +235,22 @@
 					}
 					bodymesh.scale.z = document.getElementById("range2").value;
 					var tgaloader = new THREE.TGALoader();
-					if (curr_bodytex != document.getElementById("range3").value)
+					/*if (curr_bodytex != document.getElementById("range3").value)
 					{
 						var texture = tgaloader.load( 'models/textures/Hum_Body_Naked_V'+document.getElementById("range3").value+'_C0.tga' );
 						var material = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture } );
 						bodymesh.traverse( function ( child ) {
 
 								if ( child instanceof THREE.Mesh) {
+									if (child.material.name == "BODYMATERIAL")
+									{
 									child.material = material;
+									}
 								}
 
 							} );
 							curr_bodytex = document.getElementById("range3").value
-					}
+					}*/
 					if (curr_headtex != document.getElementById("range4").value)
 					{
 						var texture2 = tgaloader.load( 'models/textures/faces/Hum_Head_V'+document.getElementById("range4").value+'_C0.tga' );
@@ -223,7 +264,7 @@
 							} );
 							curr_headtex = document.getElementById("range4").value
 					}
-					if (curr_bodymodel != document.getElementById("range0").value || curr_headmodel != document.getElementById("range1").value)
+					if (curr_bodytex != document.getElementById("range3").value || curr_bodymodel != document.getElementById("range0").value || curr_headmodel != document.getElementById("range1").value || curr_outfit != document.getElementById("range6").value||outfit != document.getElementById("check2").checked)
 					{
 						if (loaded)
 						{
@@ -234,6 +275,9 @@
 							loaded = false;
 							curr_bodymodel = document.getElementById("range0").value;
 							curr_headmodel = document.getElementById("range1").value;
+							curr_outfit = document.getElementById("range6").value;
+							curr_bodytex = document.getElementById("range3").value
+							outfit = document.getElementById("check2").checked
 							setTimeout(refreshNPC,100);
 							//refreshNPC();
 						}
@@ -243,7 +287,7 @@
 			}
 			function updateCode()
 			{
-				var v1, v2;
+				var v1, v2, v3, armorname;
 				if (curr_bodymodel == 1)
 				{ 
 					v1 = "FEMALE"; 
@@ -308,11 +352,67 @@
 					default:
 						v2 = "HUM_HEAD_PONY";
 				}
+				switch (curr_outfit)
+				{
+					case '0':
+						v3 = "0";
+						armorname = "Brak";
+						break;
+					case '1':
+						v3 = "ITAR_BAU_L";
+						armorname = "Strój farmera I";
+						break;
+					case '2':
+						v3 = "ITAR_BAU_M";
+						armorname = "Strój farmera II";
+						break;
+					case '3':
+						v3 = "ITAR_BauBabe_L";
+						armorname = "Suknia farmerki I";
+						break;
+					case '4':
+						v3 = "ITAR_BauBabe_M";
+						armorname = "Suknia farmerki II";
+						break;
+					case '5':
+						v3 = "ITAR_VlkBabe_L";
+						armorname = "Suknia obywatelki I";
+						break;
+					case '6':
+						v3 = "ITAR_VlkBabe_M";
+						armorname = "Suknia obywatelki II";
+						break;
+					case '7':
+						v3 = "ITAR_VlkBabe_H";
+						armorname = "Suknia obywatelki III";
+						break;
+					case '8':
+						v3 = "ITAR_VLK_L";
+						armorname = "Strój obywatela I";
+						break;
+					case '9':
+						v3 = "ITAR_VLK_M";
+						armorname = "Strój obywatela II";
+						break;
+					case '10':
+						v3 = "ITAR_VLK_H";
+						armorname = "Strój obywatela III";
+						break;
+					case '11':
+						v3 = "ITAR_Leather_L";
+						armorname = "Skórzany pancerz";
+						break;
+					case '12':
+						v3 = "ITAR_Governor";
+						armorname = "Kaftan gubernatora";
+						break;
+				}
 				document.getElementById( 'label2' ).innerHTML = "Model głowy: "+v2;
 				document.getElementById( 'label3' ).innerHTML = "Textura ciała: "+curr_bodytex;
 				document.getElementById( 'label4' ).innerHTML = "Textura twarzy: "+curr_headtex;
 				document.getElementById( 'label5' ).innerHTML = "Grubość: "+document.getElementById("range2").value;
-				document.getElementById( 'code' ).value = 'B_SetNpcVisual 	(self, '+v1+', "'+v2+'", '+curr_headtex+', '+curr_bodytex+', 0);\nMdl_SetModelFatness (self, '+document.getElementById("range2").value+');';
+				document.getElementById( 'label6' ).innerHTML = "Strój: "+armorname;
+				document.getElementById( 'code' ).value = 'B_SetNpcVisual 	(self, '+v1+', "'+v2+'", '+curr_headtex+', '+curr_bodytex+', '+v3+');\nMdl_SetModelFatness (self, '+document.getElementById("range2").value+');';
 			}
 			function animate() {
 				render();
