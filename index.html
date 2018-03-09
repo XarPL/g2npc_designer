@@ -81,6 +81,10 @@
 			var camera, scene, renderer;
 			var bodyid,headid;
 			var curr_bodytex, curr_headtex, curr_bodymodel, curr_headmodel;
+			var effectComposer;
+			var ssaoPass;
+			var group;
+			var postprocessing = { enabled: true, onlyAO: false, radius: 32, aoClamp: 0.25, lumInfluence: 0.7 };
 			var loaded = false;
 			init();
 			animate();
@@ -96,8 +100,6 @@
 
 						if ( child instanceof THREE.Mesh ) {
 							child.material = material;
-							
-							//child.material.normalMap = normal;
 						}
 
 					} );
@@ -113,14 +115,12 @@
 					object.rotation.z = 1.57;
 					object.rotation.y = 1.57;
 					object.position.y = 0.68;
-					object.traverse( function ( child ) {
-
-						if ( child instanceof THREE.Mesh ) {
+					object.traverse( function ( child ) 
+					{
+						if ( child instanceof THREE.Mesh ) 
+						{
 							child.material = material2;
-							
-							//child.material.normalMap = normal;
 						}
-
 					} 
 					);
 					headid = object.id;
@@ -128,24 +128,15 @@
 				});
 				loaded = true;
 			}
-			function init() {
-
+			function init() 
+			{
 				container = document.getElementById( 'render' );
-				//document.body.appendChild( container );
-
 				camera = new THREE.PerspectiveCamera( 60, window.innerWidth/2 / (window.innerHeight-100), 0.1, 10 );
 				camera.position.z = 2;
 				camera.position.y = -0.2;
-				//controls = new THREE.TrackballControls( camera );
-
 				scene = new THREE.Scene();
 				scene.add( new THREE.HemisphereLight() );
-
-				//var directionalLight = new THREE.DirectionalLight( 0xffeedd );
-				//directionalLight.position.set( 0, 0, 2 );
-				//scene.add( directionalLight );
 				refreshNPC();
-				
 				curr_bodytex = 0;
 				curr_headtex = 0;
 				curr_bodymodel = document.getElementById("range0").value;
@@ -154,88 +145,86 @@
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth/2, window.innerHeight-100 );
 				container.appendChild( renderer.domElement );
-				
 				window.addEventListener( 'resize', resize, false );
 				loaded = true;
 			}
 
-			function resize() {
-
+			function resize() 
+			{
 				camera.aspect = window.innerWidth/2 / (window.innerHeight-100);
 				camera.updateProjectionMatrix();
-
 				renderer.setSize( window.innerWidth/2, window.innerHeight-100 );
-
 			}
-			function render() {
+			function render() 
+			{
 				if (headid != -1 && bodyid != -1)
 				{
-				var bodymesh = new THREE.Object3D();
-				var headmesh = new THREE.Object3D();
-				for ( var i = 0, l = scene.children.length; i < l; i ++ ) 
-				{
-					var child = scene.children[ i ]; 
-					if ( child.id == bodyid ) 
-					{ 
-						bodymesh = child; 
-					}
-					else if ( child.id == headid ) 
-					{ 
-						headmesh = child; 
-					}
-				}
-				if (document.getElementById("check1").checked == true)
-				{
-					bodymesh.rotation.y -= 0.025;
-					headmesh.rotation.y -= 0.025;
-				}else{
-					bodymesh.rotation.y = -0.6;
-					headmesh.rotation.y = 1.57/2;
-				}
-				bodymesh.scale.z = document.getElementById("range2").value;
-				var tgaloader = new THREE.TGALoader();
-				if (curr_bodytex != document.getElementById("range3").value)
-				{
-					var texture = tgaloader.load( 'models/textures/Hum_Body_Naked_V'+document.getElementById("range3").value+'_C0.tga' );
-					var material = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture } );
-					bodymesh.traverse( function ( child ) {
-
-							if ( child instanceof THREE.Mesh) {
-								child.material = material;
-							}
-
-						} );
-						curr_bodytex = document.getElementById("range3").value
-				}
-				if (curr_headtex != document.getElementById("range4").value)
-				{
-					var texture2 = tgaloader.load( 'models/textures/faces/Hum_Head_V'+document.getElementById("range4").value+'_C0.tga' );
-					var material2 = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture2 } );
-					headmesh.traverse( function ( child ) {
-
-							if ( child instanceof THREE.Mesh) {
-								child.material = material2;
-							}
-
-						} );
-						curr_headtex = document.getElementById("range4").value
-				}
-				if (curr_bodymodel != document.getElementById("range0").value || curr_headmodel != document.getElementById("range1").value)
-				{
-					if (loaded)
+					var bodymesh = new THREE.Object3D();
+					var headmesh = new THREE.Object3D();
+					for ( var i = 0, l = scene.children.length; i < l; i ++ ) 
 					{
-						scene.remove(bodymesh);
-						scene.remove(headmesh);
-						bodyid = -1;
-						headid = -1;
-						loaded = false;
-						curr_bodymodel = document.getElementById("range0").value;
-						curr_headmodel = document.getElementById("range1").value;
-						setTimeout(refreshNPC,100);
-						//refreshNPC();
+						var child = scene.children[ i ]; 
+						if ( child.id == bodyid ) 
+						{ 
+							bodymesh = child; 
+						}
+						else if ( child.id == headid ) 
+						{ 
+							headmesh = child; 
+						}
 					}
-				}
-				renderer.render( scene, camera );
+					if (document.getElementById("check1").checked == true)
+					{
+						bodymesh.rotation.y -= 0.025;
+						headmesh.rotation.y -= 0.025;
+					}else{
+						bodymesh.rotation.y = -0.6;
+						headmesh.rotation.y = 1.57/2;
+					}
+					bodymesh.scale.z = document.getElementById("range2").value;
+					var tgaloader = new THREE.TGALoader();
+					if (curr_bodytex != document.getElementById("range3").value)
+					{
+						var texture = tgaloader.load( 'models/textures/Hum_Body_Naked_V'+document.getElementById("range3").value+'_C0.tga' );
+						var material = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture } );
+						bodymesh.traverse( function ( child ) {
+
+								if ( child instanceof THREE.Mesh) {
+									child.material = material;
+								}
+
+							} );
+							curr_bodytex = document.getElementById("range3").value
+					}
+					if (curr_headtex != document.getElementById("range4").value)
+					{
+						var texture2 = tgaloader.load( 'models/textures/faces/Hum_Head_V'+document.getElementById("range4").value+'_C0.tga' );
+						var material2 = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture2 } );
+						headmesh.traverse( function ( child ) {
+
+								if ( child instanceof THREE.Mesh) {
+									child.material = material2;
+								}
+
+							} );
+							curr_headtex = document.getElementById("range4").value
+					}
+					if (curr_bodymodel != document.getElementById("range0").value || curr_headmodel != document.getElementById("range1").value)
+					{
+						if (loaded)
+						{
+							scene.remove(bodymesh);
+							scene.remove(headmesh);
+							bodyid = -1;
+							headid = -1;
+							loaded = false;
+							curr_bodymodel = document.getElementById("range0").value;
+							curr_headmodel = document.getElementById("range1").value;
+							setTimeout(refreshNPC,100);
+							//refreshNPC();
+						}
+					}
+					renderer.render( scene, camera );
 				}
 			}
 			function updateCode()
