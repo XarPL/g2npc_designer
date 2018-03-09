@@ -93,6 +93,7 @@
 		<script src="js/three.min.js"></script>
 		<script src="js/loaders/TDSLoader.js"></script>
 		<script src="js/loaders/TGALoader.js"></script>
+		<script src="js/orbitControls.js"></script>
 		<script>
 
 			var container, controls;
@@ -197,6 +198,8 @@
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth/4, window.innerHeight-100 );
 				container.appendChild( renderer.domElement );
+				controls = new THREE.OrbitControls(camera, renderer.domElement);
+				controls.addEventListener( 'change', render );
 				window.addEventListener( 'resize', resize, false );
 				loaded = true;
 			}
@@ -279,7 +282,7 @@
 							curr_bodytex = document.getElementById("range3").value
 							outfit = document.getElementById("check2").checked
 							setTimeout(refreshNPC,100);
-							//refreshNPC();
+							//refreshNPC();		
 						}
 					}
 					renderer.render( scene, camera );
