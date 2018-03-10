@@ -94,6 +94,10 @@
 		<script src="js/loaders/TDSLoader.js"></script>
 		<script src="js/loaders/TGALoader.js"></script>
 		<script src="js/orbitControls.js"></script>
+		<script src="js/dtype.js"></script>
+		<script src="js/tab64.js"></script>
+		<script src="js/canvas-pixels.js"></script>
+
 		<script>
 
 			var container, controls;
@@ -102,8 +106,26 @@
 			var curr_bodytex, curr_headtex, curr_bodymodel, curr_headmodel, curr_outfit;
 			var outfit = true;
 			var loaded = false;
+
 			init();
+			if (window.location.hash) {
+				permalink = window.location.hash.substring(1).split('-');
+				[curr_bodymodel, 
+				 curr_headmodel, 
+				 curr_outfit, 
+			 	 curr_bodytex, 
+				 curr_headtex,
+				 outfit] = permalink;
+				 document.getElementById("range0").value = curr_bodymodel;
+				 document.getElementById("range1").value = curr_headmodel;
+ 				 document.getElementById("range6").value = curr_outfit;
+				 document.getElementById("range3").value = curr_bodytex;
+				 document.getElementById("range4").value = curr_headtex;
+				 document.getElementById("check2").checked = (outfit == 'true');
+
+			}
 			animate();
+
 			function refreshNPC()
 			{
 				var loader = new THREE.TDSLoader( );
@@ -188,7 +210,6 @@
 				camera.position.y = -0.2;
 				scene = new THREE.Scene();
 				scene.add( new THREE.HemisphereLight() );
-				refreshNPC();
 				curr_bodytex = 0;
 				curr_headtex = 0;
 				curr_bodymodel = document.getElementById("range0").value;
@@ -416,6 +437,15 @@
 				document.getElementById( 'label5' ).innerHTML = "Grubość: "+document.getElementById("range2").value;
 				document.getElementById( 'label6' ).innerHTML = "Strój: "+armorname;
 				document.getElementById( 'code' ).value = 'B_SetNpcVisual 	(self, '+v1+', "'+v2+'", '+curr_headtex+', '+curr_bodytex+', '+v3+');\nMdl_SetModelFatness (self, '+document.getElementById("range2").value+');';
+
+				var permalink = [
+					curr_bodymodel, 
+					curr_headmodel, 
+					curr_outfit, 
+					curr_bodytex, 
+					curr_headtex,
+					outfit].join('-');
+				window.location.hash = permalink;
 			}
 			function animate() {
 				render();
