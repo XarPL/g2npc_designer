@@ -1,0 +1,29 @@
+{
+  "name": "g2npc_designer",
+  "version": "0.1.0",
+  "description": "Gothic 2 NPC designer",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Xardas49/g2npc_designer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Xardas49/g2npc_designer/issues"
+  },
+  "homepage": "https://github.com/Xardas49/g2npc_designer#readme",
+  "devDependencies": {},
+  "dependencies": {
+    "gl-gif": "^3.1.0",
+    "http-browserify": "^1.7.0",
+    "three-js": "^79.0.0",
+    "xhr": "^2.4.1"
+  },
+  "browser": {
+    "request": "xhr"
+  }
+}
