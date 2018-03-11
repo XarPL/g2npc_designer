@@ -19,11 +19,6 @@
   "devDependencies": {},
   "dependencies": {
     "gl-gif": "^3.1.0",
-    "http-browserify": "^1.7.0",
-    "three-js": "^79.0.0",
-    "xhr": "^2.4.1"
-  },
-  "browser": {
-    "request": "xhr"
+    "http-browserify": "^1.7.0"
   }
 }
