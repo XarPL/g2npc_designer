@@ -9,7 +9,18 @@ var bodyid,headid;
 var curr_bodytex, curr_headtex, curr_bodymodel, curr_headmodel, curr_outfit;
 var outfit = true;
 var loaded = false;
-
+var BodyTableMale = [0,1,2,3,8,9,10];
+var BodyTableFemale = [4,5,6,7,11,12];
+var HeadTableFemale = [0,1,2,3,4,5,6,7,8,9,10];
+var HeadTableMale = [11,12,13,14,15,16];
+var FaceTableMale0 = [41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,19];
+var FaceTableMale1 = [58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75];
+var FaceTableMale2 = [120,121,122,123,124,125,126,127,128];
+var FaceTableMale3 = [129,130,131,132,133,134,135,136];
+var FaceTableFemale = [137,138,139,140,141,142,143,144,145,146,148,149,150,151,152,153,154,155,156,157];
+var currFaceTable;
+var currBodyTable;
+var currHeadTable;
 var speed = 1.0;
 
 var permalink;
@@ -35,7 +46,7 @@ if (window.location.hash) {
 
 }
 updateCode();
-
+refreshNPC();
 animate();
 
 function refreshNPC()
@@ -46,7 +57,7 @@ function refreshNPC()
 	{
 		var addtexture = tgaloader.load( 'models/textures/armors/armor'+document.getElementById("range6").value+'_add.tga' );
 		var addmaterial = new THREE.MeshPhongMaterial( { color: 0xffffff, map: addtexture } );
-		var bodytexture = tgaloader.load( 'models/textures/Hum_Body_Naked_V'+document.getElementById("range3").value+'_C0.tga' );
+		var bodytexture = tgaloader.load( 'models/textures/Hum_Body_Naked_V'+currBodyTable[curr_bodytex]+'_C0.tga' );
 		var bodymaterial = new THREE.MeshPhongMaterial( { color: 0xffffff, map: bodytexture } );
 		var texture = tgaloader.load( 'models/textures/armors/armor'+document.getElementById("range6").value+'.tga' );
 		var material = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture } );
@@ -74,7 +85,7 @@ function refreshNPC()
 		});
 	}else
 	{
-	var texture = tgaloader.load( 'models/textures/Hum_Body_Naked_V'+document.getElementById("range3").value+'_C0.tga' );
+	var texture = tgaloader.load( 'models/textures/Hum_Body_Naked_V'+currBodyTable[curr_bodytex]+'_C0.tga' );
 	var material = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture } );
 	loader.load( 'models/body/body'+document.getElementById("range0").value+'.3ds', function ( object ) {
 		object.name = "body";
@@ -94,9 +105,9 @@ function refreshNPC()
 	}
 	var loader2 = new THREE.TDSLoader( );
 	var tgaloader = new THREE.TGALoader();
-	var texture2 = tgaloader.load( 'models/textures/faces/Hum_Head_V'+document.getElementById("range4").value+'_C0.tga' );
+	var texture2 = tgaloader.load( 'models/textures/faces/Hum_Head_V'+currFaceTable[curr_headtex]+'_C0.tga' );
 	var material2 = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture2 } );
-	loader2.load( 'models/head/'+document.getElementById("range1").value+'.3ds', function ( object ) {
+	loader2.load( 'models/head/'+currHeadTable[curr_headmodel]+'.3ds', function ( object ) {
 		object.name = "head";
 		object.rotation.z = 1.57;
 		object.rotation.y = 1.57;
@@ -186,18 +197,20 @@ function render()
 				} );
 				curr_bodytex = document.getElementById("range3").value
 		}*/
+		
 		if (curr_headtex != document.getElementById("range4").value)
 		{
-			var texture2 = tgaloader.load( 'models/textures/faces/Hum_Head_V'+document.getElementById("range4").value+'_C0.tga' );
+			var texture2 = tgaloader.load( 'models/textures/faces/Hum_Head_V'+currFaceTable[curr_headtex]+'_C0.tga' );
 			var material2 = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture2 } );
 			headmesh.traverse( function ( child ) {
 
 					if ( child instanceof THREE.Mesh) {
 						child.material = material2;
 					}
-
 				} );
+				
 				curr_headtex = document.getElementById("range4").value
+				updateCode();
 		}
 		if (curr_bodytex != document.getElementById("range3").value || curr_bodymodel != document.getElementById("range0").value || curr_headmodel != document.getElementById("range1").value || curr_outfit != document.getElementById("range6").value||outfit != document.getElementById("check2").checked)
 		{
@@ -212,9 +225,11 @@ function render()
 				curr_headmodel = document.getElementById("range1").value;
 				curr_outfit = document.getElementById("range6").value;
 				curr_bodytex = document.getElementById("range3").value
+				curr_headtex = document.getElementById("range4").value
 				outfit = document.getElementById("check2").checked
-				setTimeout(refreshNPC,100);
-				//refreshNPC();		
+				updateCode();
+				//setTimeout(refreshNPC,100);
+				refreshNPC();		
 			}
 		}
 		renderer.render( scene, camera );
@@ -227,61 +242,93 @@ function updateCode()
 	{ 
 		v1 = "FEMALE"; 
 		document.getElementById( 'label1' ).innerHTML = "Model ciała: Żeński";
+		currBodyTable = BodyTableFemale;
+		currHeadTable = HeadTableFemale;
+		currFaceTable = FaceTableFemale;
 	}
 	else 
 	{
 		v1 = "MALE";
 		document.getElementById( 'label1' ).innerHTML = "Model ciała: Męski";
+		currBodyTable = BodyTableMale;
+		currHeadTable = HeadTableMale;
+		if (currBodyTable[curr_bodytex] == '0')
+		{
+			currFaceTable = FaceTableMale0;
+		}
+		else if (currBodyTable[curr_bodytex] == '1')
+		{
+			currFaceTable = FaceTableMale1;
+		}
+		else if (currBodyTable[curr_bodytex] == '2')
+		{
+			currFaceTable = FaceTableMale2;
+		}
+		else if (currBodyTable[curr_bodytex] == '3')
+		{
+			currFaceTable = FaceTableMale3;
+		}else
+		{
+			currFaceTable = FaceTableMale1;
+		}
 	}
+	document.getElementById( 'range3' ).max = currBodyTable.length-1;
+	document.getElementById( 'range1' ).max = currHeadTable.length-1;
+	document.getElementById("range4").max = currFaceTable.length-1;
 	
-	switch (curr_headmodel)
+	curr_bodymodel = document.getElementById("range0").value;
+	curr_headmodel = document.getElementById("range1").value;
+	curr_outfit = document.getElementById("range6").value;
+	curr_bodytex = document.getElementById("range3").value
+	curr_headtex = document.getElementById("range4").value
+	switch (currHeadTable[curr_headmodel])
 	{
-		case '1':
+		case 1:
 			v2 = "HUM_HEAD_BABE";
 			break;
-		case '2':
+		case 2:
 			v2 = "HUM_HEAD_BABE1";
 			break;
-		case '3':
+		case 3:
 			v2 = "HUM_HEAD_BABE2";
 			break;
-		case '4':
+		case 4:
 			v2 = "HUM_HEAD_BABE3";
 			break;
-		case '5':
+		case 5:
 			v2 = "HUM_HEAD_BABE4";
 			break;
-		case '6':
+		case 6:
 			v2 = "HUM_HEAD_BABE5";
 			break;
-		case '7':
+		case 7:
 			v2 = "HUM_HEAD_BABE6";
 			break;
-		case '8':
+		case 8:
 			v2 = "HUM_HEAD_BABE7";
 			break;
-		case '9':
+		case 9:
 			v2 = "HUM_HEAD_BABE8";
 			break;
-		case '10':
+		case 10:
 			v2 = "HUM_HEAD_BABEHAIR";
 			break;
-		case '11':
+		case 11:
 			v2 = "HUM_HEAD_BALD";
 			break;
-		case '12':
+		case 12:
 			v2 = "HUM_HEAD_FATBALD";
 			break;
-		case '13':
+		case 13:
 			v2 = "HUM_HEAD_FIGHTER";
 			break;
-		case '14':
+		case 14:
 			v2 = "HUM_HEAD_PONY";
 			break;
-		case '15':
+		case 15:
 			v2 = "HUM_HEAD_PSIONIC";
 			break;
-		case '16':
+		case 16:
 			v2 = "HUM_HEAD_THIEF";
 			break;
 		default:
@@ -343,11 +390,11 @@ function updateCode()
 			break;
 	}
 	document.getElementById( 'label2' ).innerHTML = "Model głowy: "+v2;
-	document.getElementById( 'label3' ).innerHTML = "Textura ciała: "+curr_bodytex;
-	document.getElementById( 'label4' ).innerHTML = "Textura twarzy: "+curr_headtex;
+	document.getElementById( 'label3' ).innerHTML = "Textura ciała: "+currBodyTable[curr_bodytex];
+	document.getElementById( 'label4' ).innerHTML = "Textura twarzy: "+currFaceTable[curr_headtex];
 	document.getElementById( 'label5' ).innerHTML = "Grubość: "+document.getElementById("range2").value;
 	document.getElementById( 'label6' ).innerHTML = "Strój: "+armorname;
-	document.getElementById( 'code' ).value = 'B_SetNpcVisual 	(self, '+v1+', "'+v2+'", '+curr_headtex+', '+curr_bodytex+', '+v3+');\nMdl_SetModelFatness (self, '+document.getElementById("range2").value+');';
+	document.getElementById( 'code' ).value = 'B_SetNpcVisual 	(self, '+v1+', "'+v2+'", '+currFaceTable[curr_headtex];+', '+currBodyTable[curr_bodytex]+', '+v3+');\nMdl_SetModelFatness (self, '+document.getElementById("range2").value+');';
 
 	permalink = [
 		curr_bodymodel, 
@@ -449,7 +496,7 @@ function uploadGif(gif) {
 function animate() {
 	render();
 	renderGif();
-	updateCode();
+	
 	requestAnimationFrame( animate );
 }
 },{"gl-gif":4}],2:[function(require,module,exports){
