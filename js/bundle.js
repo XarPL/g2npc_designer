@@ -28,9 +28,6 @@ var permalink;
 
 var noop = function() {};
 var renderGif = noop;
-
-init();
-updateCode();
 if (window.location.hash) {
 	permalink = window.location.hash.substring(1).split('-');
 	[curr_bodymodel, 
@@ -45,10 +42,10 @@ if (window.location.hash) {
 	 document.getElementById("range3").value = curr_bodytex;
 	 document.getElementById("range4").value = curr_headtex;
 	 document.getElementById("check2").checked = (outfit == 'true');
-}else{
-	refreshNPC();
 }
+init();
 
+updateCode();
 
 animate();
 
@@ -150,21 +147,21 @@ function init()
 	container.appendChild( renderer.domElement );
 	controls = new THREE.OrbitControls(camera, renderer.domElement);
 	controls.addEventListener( 'change', render );
-	window.addEventListener( 'resize', resize, false );
+	window.addEventListener( 'resize', auto_resize, false );
 	loaded = true;
 }
-
 function resize(width, height) 
 {
-	if (width)
-	{
-		camera.aspect = width / height;
-		renderer.setSize( width, height );
-	}else
-	{
-		camera.aspect = window.innerWidth/4 / (window.innerHeight-100);
-		renderer.setSize( window.innerWidth/4, window.innerHeight-100 );
-	}
+	var width = width || (window.innerWidth/4);
+	var height = height || (window.innerHeight-100);
+	camera.aspect = width / height;
+	camera.updateProjectionMatrix();
+	renderer.setSize( width, height );
+}
+function auto_resize() 
+{
+	camera.aspect = window.innerWidth/4 / (window.innerHeight-100);
+	renderer.setSize( window.innerWidth/4, window.innerHeight-100 );
 	camera.updateProjectionMatrix();
 }
 function render() 
@@ -416,9 +413,9 @@ function updateCode()
 $("#generate-gif").click(function() {
 
 	$("#render-progress-bar-container").removeAttr("hidden");
-
-	$(".progress-bar-animated").css("width", "0%");
-	$(".progress-bar-animated small").text("");
+	
+	//$(".progress-bar-animated").css("width", "0%");
+	//$(".progress-bar-animated small").text("");
 
 	$("#check1").prop('checked', true);
 
@@ -443,9 +440,9 @@ $("#generate-gif").click(function() {
 	renderGif = function() {
 		if (++counter < frames) {
 			gif.tick();
-			var progress = Math.ceil((counter * 100.0) / (frames-1)) + "%";
-			$("#render-progress-bar").css("width", progress);
-			$("#render-progress-bar small").text("Rendering: " + progress);
+			var progress = Math.ceil((counter * 100.0) / (frames-1));
+			gif_render_prog = progress;
+			$('#p1text').text("Rendering: " + progress + "%");
 		} else {
 			speed = 1.0;
 			resize();
@@ -469,11 +466,14 @@ function uploadGif(gif) {
 	formData.append("tags", ["Gothic 2 NPC Designer"]);	
 
 	var updateProgress = function (percentage) {
-		$("#upload-progress-bar").css("width", percentage + "%");
+		//$("#upload-progress-bar").css("width", percentage + "%");
+		document.querySelector('#p2').MaterialProgress.setProgress(percentage);
+		
 		var text = (percentage == 100) 
 			? "Uploading complete!" 
 			: "Uploading: " + percentage + "%";
-		$("#upload-progress-bar small").text(text);
+		//$("#upload-progress-bar small").text(text);
+		$('#p2text').text(text);
 	}
 
 	var request = new XMLHttpRequest();
@@ -503,7 +503,6 @@ function uploadGif(gif) {
 function animate() {
 	render();
 	renderGif();
-	
 	requestAnimationFrame( animate );
 }
 },{"gl-gif":4}],2:[function(require,module,exports){

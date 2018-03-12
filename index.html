@@ -4,102 +4,126 @@
 		<title>Gothic II NPC Designer</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		</style>
-		<link rel="stylesheet" href="https://bootswatch.com/4/slate/bootstrap.css">
 		<script src="js/jquery-3.3.1.min.js" ></script>
 		<script src="js/popper.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+		<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue_grey-blue.min.css" /> 
+		<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 		<script src="js/clipboard.min.js"></script>
 	</head>
 
 	<body>
-		<nav class="navbar navbar-light bg-light">
-			<a class="navbar-brand" href="#">Gothic II Npc Designer</a>
-		</nav>
-		<div class="container">
-		
-		  <div class="row">
-			
-			  <div class="col-8">
-			  <div class="row" style="margin:5%;">
-				
-				<ul class="list-group">
-				  <li class="list-group-item">
-						<div>
-					  <label id="label1" class="form-check-label" for="range0">Model ciała: Męski</label>
-					  </div>
-					  <input type="range" id="range0" min="1" max="2" value="2" step="1">
-				  </li>
-				  <li class="list-group-item"><div>
-					
-					<label id="label2" class="form-check-label" for="exampleCheck1">Model głowy</label>
-				  </div>
-				  <input type="range" id="range1" min="1" max="16" value="12" step="1">
-				  </li>
-				  <li class="list-group-item"><div>
-					
-					<label id="label3" class="form-check-label" for="exampleCheck1">Tekstura ciała</label>
-				  </div>
-				  <input type="range" id="range3" min="0" max="12" value="0" step="1">
-				  </li>
-				  <li class="list-group-item"><div>
-					
-					<label id="label4" class="form-check-label" for="exampleCheck1">Tekstura twarzy</label>
-				  </div>
-				  <input type="range" id="range4" min="0" max="162" value="0" step="1">
-				  </li>
-				  <li class="list-group-item"><div>
-					
-					<label id="label5" class="form-check-label" for="exampleCheck1">Grubość</label>
-				  </div>
-				  <input type="range" id="range2" min="0.7" max="1.3" value="1" step="0.1">
-				  </li>
-				</ul>
-				<ul class="list-group">
-				  <li class="list-group-item">
-						<div>
-					  <label id="label6" class="form-check-label" for="range0">Strój: </label>
-					  </div>
-					  <input type="range" id="range6" min="0" max="12" value="0" step="1">
-				  </li>
-				  <li class="list-group-item"><div>
-					<div class="checkbox">
-					<label><input id="check1" type="checkbox" value="">Obrót postaci</label>
+		<!-- Always shows a header, even in smaller screens. -->
+		<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+		  <header class="mdl-layout__header">
+			<div class="mdl-layout__header-row">
+			  <!-- Title -->
+			  <span class="mdl-layout-title">Gothic II Npc Designer</span>
+			  <!-- Add spacer, to align navigation to the right -->
+			  <div class="mdl-layout-spacer"></div>
+			  <!-- Navigation. We hide it in small screens. -->
+			  <nav class="mdl-navigation mdl-layout--large-screen-only">
+				<a class="mdl-navigation__link" href="https://github.com/Xardas49/g2npc_designer">GitHub</a>
+			  </nav>
+			</div>
+		  </header>
+		  <div class="mdl-layout__drawer mdl-navigation mdl-layout--small-screen-only">
+			<span class="mdl-layout-title">Title</span>
+			<nav class="mdl-navigation">
+			  <a class="mdl-navigation__link" href="https://github.com/Xardas49/g2npc_designer">GitHub</a>
+			</nav>
+		  </div>
+		  <main class="mdl-layout__content">
+			<div class="page-content">
+				<div class="mdl-grid">
+					<div class="mdl-cell mdl-cell--8-col">
+					<div class="mdl-grid">
+						<div class="mdl-cell mdl-cell--4-col">
+							<div style="width:100%; min-height: 100px;" class="mdl-card mdl-shadow--2dp">
+								<div id="label1" class="mdl-card__title">
+									
+								</div>
+								<input id="range0" class="mdl-slider mdl-js-slider" type="range" min="1" max="2" value="2" step="1">
+							</div>
+						</div>
+						<div class="mdl-cell mdl-cell--4-col">
+							<div style="width:100%; min-height: 100px;" class="mdl-card mdl-shadow--2dp">
+								<div id="label2" class="mdl-card__title">
+									
+								  </div>
+								<input id="range1" class="mdl-slider mdl-js-slider" type="range" min="1" max="16" value="12" step="1">
+							</div>
+						</div>
+						<div class="mdl-cell mdl-cell--4-col">
+							<div style="width:100%; min-height: 100px;" class="mdl-card mdl-shadow--2dp">
+								<div id="label3" class="mdl-card__title">
+									
+								  </div>
+								<input id="range3" class="mdl-slider mdl-js-slider" type="range" min="0" max="12" value="0">
+							</div>
+						</div>
+						<div class="mdl-cell mdl-cell--4-col">
+							<div style="width:100%; min-height: 100px;" class="mdl-card mdl-shadow--2dp">
+								<div id="label4" class="mdl-card__title">
+									
+								</div>
+								<input id="range4" class="mdl-slider mdl-js-slider" type="range" min="0" max="162" value="0" step="1">
+							</div>
+						</div>
+						<div class="mdl-cell mdl-cell--4-col">
+							<div style="width:100%; min-height: 100px;" class="mdl-card mdl-shadow--2dp">
+								<div id="label5" class="mdl-card__title">
+									
+								  </div>
+								<input id="range2" class="mdl-slider mdl-js-slider" type="range" min="0.7" max="1.3" value="1" step="0.1">
+							</div>
+						</div>
+						<div class="mdl-cell mdl-cell--4-col">
+							<div style="width:100%; min-height: 100px;" class="mdl-card mdl-shadow--2dp">
+								<div id="label6" class="mdl-card__title">
+									
+								  </div>
+								<input id="range6" class="mdl-slider mdl-js-slider" type="range" min="0" max="12" value="0">
+							</div>
+						</div>
+						
+						<div class="mdl-cell mdl-cell--4-col">
+							<div style="width:100%; min-height: 100px;" class="mdl-card mdl-shadow--2dp">
+							<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="check1">
+							  <input id="check1" type="checkbox" id="switch-1" class="mdl-switch__input" >
+							  <span class="mdl-switch__label">Obrót postaci</span>
+							</label>
+							<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="check2">
+							  <input id="check2" type="checkbox" id="switch-2" class="mdl-switch__input" checked>
+							  <span class="mdl-switch__label">Pokaż strój</span>
+							</label>
+							<button id="generate-gif" class="btn mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+							  Generuj GIF
+							</button>
+							</div>
+						</div>
+						<div  class="mdl-cell mdl-cell--4-col">
+							<div hidden id="render-progress-bar-container" style="width:100%; min-height: 50px;" class="mdl-card mdl-shadow--2dp">
+								<div id="p1" class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+								<div id="p1text"></div>
+							</div>
+							
+							<div hidden id="upload-progress-bar-container" style="width:100%; min-height: 50px;" class="mdl-card mdl-shadow--2dp">
+								<div id="p2" class="mdl-progress mdl-js-progress"></div>
+								<div id="p2text"></div>
+							</div>
+						</div>
 					</div>
-					<div class="checkbox">
-					<label><input id="check2" type="checkbox" value="" checked>Pokaż strój</label>
-				  <li class="list-group-item">
-					<div class="button">
-						<button id="generate-gif" type="button" class="btn btn-danger">Generate GIF</button>
-					</div>
-				  </li>
-  				  <li hidden class="list-group-item" id="render-progress-bar-container">
-					<div class="progress position-relative">
-					  <div id="render-progress-bar" class="progress-bar-animated progress-bar-striped active" role="progressbar" 
-					  aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
-					      <small class="justify-content-center d-flex position-absolute w-100">0%</small>
-					  </div>
-					</div>
-  				  </li>	
-				  <li hidden class="list-group-item" id="upload-progress-bar-container">
-					<div class="progress position-relative">
-					  <div id="upload-progress-bar" class="progress-bar-animated progress-bar-striped active" role="progressbar" 
-					  aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
-					      <small class="justify-content-center d-flex position-absolute w-100">0%</small>
-					  </div>
-					</div>
-  				  </li>				  
-				</ul>	
-			  </div>
-
-			  <div class="row"> 
-				<div class="input-group">
+					<div class="input-group">
 				  <div class="input-group-prepend">
 					<span class="input-group-addon btn btn-primary" data-clipboard-target="#code">
 					  <img src="assets/clippy.svg" width="30" alt="Copy to clipboard">
  					</span>
 				  </div>
-				  <textarea id="code" class="form-control" aria-label="With textarea"></textarea>
+				  <div class="mdl-textfield mdl-js-textfield">
+					<textarea id="code" class="mdl-textfield__input" type="text" rows= "3" id="sample5" ></textarea>
+					<label class="mdl-textfield__label" for="sample5">Code</label>
+				  </div>
 				</div>		
  				<div hidden class="input-group" id="gif-link-container">
 				  <div class="input-group-prepend">
@@ -109,16 +133,21 @@
 				  </div>
 				  <input id="gif-link" class="form-control" aria-label="With input"></input>
 				</div>
-			  </div>
-			  	v0.1c <a href="https://github.com/Xardas49/g2npc_designer">github.com/Xardas49/g2npc_designer</a>
-			  </div>
-			  <div id="render" class="col-4"></div>
+					</div>
+					<div class="mdl-cell mdl-cell--4-col">
+						<div id="render"></div>
+					</div>
+				</div>
 			</div>
+		  </main>
 		</div>
+		  
 		<script src="js/three.min.js"></script>
      	<script src="js/loaders/TDSLoader.js"></script>
 		<script src="js/loaders/TGALoader.js"></script>
 		<script src="js/orbitControls.js"></script>
 		<script src="js/bundle.js"></script>
+		
+			   
 	</body>
 </html>
