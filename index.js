@@ -166,9 +166,6 @@ function render()
 		{
 			bodymesh.rotation.y -= speed * 0.02617993877991494;
 			headmesh.rotation.y -= speed * 0.02617993877991494;
-		}else{
-			bodymesh.rotation.y = -0.6;
-			headmesh.rotation.y = 1.57/2;
 		}
 		bodymesh.scale.z = document.getElementById("range2").value;
 		var tgaloader = new THREE.TGALoader();
