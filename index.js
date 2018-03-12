@@ -393,7 +393,7 @@ function updateCode()
 	document.getElementById( 'label4' ).innerHTML = "Textura twarzy: "+currFaceTable[curr_headtex];
 	document.getElementById( 'label5' ).innerHTML = "Grubość: "+document.getElementById("range2").value;
 	document.getElementById( 'label6' ).innerHTML = "Strój: "+armorname;
-	document.getElementById( 'code' ).value = 'B_SetNpcVisual 	(self, '+v1+', "'+v2+'", '+currFaceTable[curr_headtex];+', '+currBodyTable[curr_bodytex]+', '+v3+');\nMdl_SetModelFatness (self, '+document.getElementById("range2").value+');';
+	document.getElementById( 'code' ).value = 'B_SetNpcVisual 	(self, '+v1+', "'+v2+'", '+currFaceTable[curr_headtex]+', '+currBodyTable[curr_bodytex]+', '+v3+');\nMdl_SetModelFatness (self, '+document.getElementById("range2").value+');';
 
 	permalink = [
 		curr_bodymodel, 
