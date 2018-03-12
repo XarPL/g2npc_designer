@@ -22,13 +22,15 @@ var currFaceTable;
 var currBodyTable;
 var currHeadTable;
 var speed = 1.0;
-
+var bodymesh = new THREE.Object3D();
+var headmesh = new THREE.Object3D();
 var permalink;
 
 var noop = function() {};
 var renderGif = noop;
 
 init();
+updateCode();
 if (window.location.hash) {
 	permalink = window.location.hash.substring(1).split('-');
 	[curr_bodymodel, 
@@ -43,14 +45,19 @@ if (window.location.hash) {
 	 document.getElementById("range3").value = curr_bodytex;
 	 document.getElementById("range4").value = curr_headtex;
 	 document.getElementById("check2").checked = (outfit == 'true');
-
+}else{
+	refreshNPC();
 }
-updateCode();
-refreshNPC();
+
+
 animate();
 
 function refreshNPC()
 {
+	while(scene.children.length > 0){ 
+    scene.remove(scene.children[0]); 
+	}
+	scene.add( new THREE.HemisphereLight() );
 	var loader = new THREE.TDSLoader( );
 	var tgaloader = new THREE.TGALoader();
 	if (document.getElementById("range6").value > 0 && outfit == true)
@@ -132,7 +139,6 @@ function init()
 	camera.position.z = 2;
 	camera.position.y = -0.2;
 	scene = new THREE.Scene();
-	scene.add( new THREE.HemisphereLight() );
 	curr_bodytex = 0;
 	curr_headtex = 0;
 	curr_bodymodel = document.getElementById("range0").value;
@@ -148,18 +154,23 @@ function init()
 	loaded = true;
 }
 
-function resize() 
+function resize(width, height) 
 {
-	camera.aspect = window.innerWidth/4 / (window.innerHeight-100);
+	if (width)
+	{
+		camera.aspect = width / height;
+		renderer.setSize( width, height );
+	}else
+	{
+		camera.aspect = window.innerWidth/4 / (window.innerHeight-100);
+		renderer.setSize( window.innerWidth/4, window.innerHeight-100 );
+	}
 	camera.updateProjectionMatrix();
-	renderer.setSize( window.innerWidth/4, window.innerHeight-100 );
 }
 function render() 
 {
 	if (headid != -1 && bodyid != -1)
 	{
-		var bodymesh = new THREE.Object3D();
-		var headmesh = new THREE.Object3D();
 		for ( var i = 0, l = scene.children.length; i < l; i ++ ) 
 		{
 			var child = scene.children[ i ]; 
@@ -214,8 +225,6 @@ function render()
 		{
 			if (loaded)
 			{
-				scene.remove(bodymesh);
-				scene.remove(headmesh);
 				bodyid = -1;
 				headid = -1;
 				loaded = false;
@@ -226,8 +235,8 @@ function render()
 				curr_headtex = document.getElementById("range4").value
 				outfit = document.getElementById("check2").checked
 				updateCode();
-				//setTimeout(refreshNPC,100);
-				refreshNPC();		
+				setTimeout(refreshNPC,100);
+				//refreshNPC();		
 			}
 		}
 		renderer.render( scene, camera );
