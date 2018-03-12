@@ -148,13 +148,11 @@ function init()
 	loaded = true;
 }
 
-function resize(width, height) 
+function resize() 
 {
-	var width = width || (window.innerWidth/4);
-	var height = height || (window.innerHeight-100);
-	camera.aspect = width / height;
+	camera.aspect = window.innerWidth/4 / (window.innerHeight-100);
 	camera.updateProjectionMatrix();
-	renderer.setSize( width, height );
+	renderer.setSize( window.innerWidth/4, window.innerHeight-100 );
 }
 function render() 
 {
