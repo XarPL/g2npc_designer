@@ -27,6 +27,10 @@ var permalink;
 
 var noop = function() {};
 var renderGif = noop;
+if (!window.location.hash)
+{
+	window.location.hash = "2-5-0-0-0-true";
+}
 if (window.location.hash) {
 	permalink = window.location.hash.substring(1).split('-');
 	[curr_bodymodel, 
@@ -140,6 +144,7 @@ function init()
 	curr_bodymodel = document.getElementById("range0").value;
 	curr_headmodel = document.getElementById("range1").value;
 	curr_outfit = document.getElementById("range6").value;
+	
 	renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 	renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.setSize( window.innerWidth/4, window.innerHeight-100 );
