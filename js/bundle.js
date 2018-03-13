@@ -136,7 +136,7 @@ function refreshNPC()
 function init() 
 {
 	container = document.getElementById( 'render' );
-	camera = new THREE.PerspectiveCamera( 60, window.innerWidth/2 / (window.innerHeight-100), 0.1, 10 );
+	camera = new THREE.PerspectiveCamera( 60, window.innerWidth/2 / (window.innerHeight-60), 0.1, 10 );
 	camera.position.z = 2;
 	camera.position.y = -0.2;
 	scene = new THREE.Scene();
@@ -148,7 +148,7 @@ function init()
 	
 	renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 	renderer.setPixelRatio( window.devicePixelRatio );
-	renderer.setSize( window.innerWidth/2, window.innerHeight-100 );
+	renderer.setSize( window.innerWidth/2, window.innerHeight-60 );
 	container.appendChild( renderer.domElement );
 	controls = new THREE.OrbitControls(camera, renderer.domElement);
 	controls.addEventListener( 'change', render );
