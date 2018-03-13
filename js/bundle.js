@@ -136,7 +136,7 @@ function refreshNPC()
 function init() 
 {
 	container = document.getElementById( 'render' );
-	camera = new THREE.PerspectiveCamera( 60, window.innerWidth/4 / (window.innerHeight-100), 0.1, 10 );
+	camera = new THREE.PerspectiveCamera( 60, window.innerWidth/2 / (window.innerHeight-100), 0.1, 10 );
 	camera.position.z = 2;
 	camera.position.y = -0.2;
 	scene = new THREE.Scene();
@@ -148,7 +148,7 @@ function init()
 	
 	renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 	renderer.setPixelRatio( window.devicePixelRatio );
-	renderer.setSize( window.innerWidth/4, window.innerHeight-100 );
+	renderer.setSize( window.innerWidth/2, window.innerHeight-100 );
 	container.appendChild( renderer.domElement );
 	controls = new THREE.OrbitControls(camera, renderer.domElement);
 	controls.addEventListener( 'change', render );
@@ -157,7 +157,7 @@ function init()
 }
 function resize(width, height) 
 {
-	var width = width || (window.innerWidth/4);
+	var width = width || (window.innerWidth/2);
 	var height = height || (window.innerHeight-100);
 	camera.aspect = width / height;
 	camera.updateProjectionMatrix();
@@ -165,8 +165,8 @@ function resize(width, height)
 }
 function auto_resize() 
 {
-	camera.aspect = window.innerWidth/4 / (window.innerHeight-100);
-	renderer.setSize( window.innerWidth/4, window.innerHeight-100 );
+	camera.aspect = window.innerWidth/2 / (window.innerHeight-100);
+	renderer.setSize( window.innerWidth/2, window.innerHeight-100 );
 	camera.updateProjectionMatrix();
 }
 function render() 
@@ -191,26 +191,12 @@ function render()
 			headmesh.rotation.y -= speed * 0.02617993877991494;
 		}
 		bodymesh.scale.z = document.getElementById("range2").value;
+		document.getElementById( 'label5' ).innerHTML = "Grubość: "+document.getElementById("range2").value;
 		var tgaloader = new THREE.TGALoader();
-		/*if (curr_bodytex != document.getElementById("range3").value)
-		{
-			var texture = tgaloader.load( 'models/textures/Hum_Body_Naked_V'+document.getElementById("range3").value+'_C0.tga' );
-			var material = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture } );
-			bodymesh.traverse( function ( child ) {
-
-					if ( child instanceof THREE.Mesh) {
-						if (child.material.name == "BODYMATERIAL")
-						{
-						child.material = material;
-						}
-					}
-
-				} );
-				curr_bodytex = document.getElementById("range3").value
-		}*/
-		
 		if (curr_headtex != document.getElementById("range4").value)
 		{
+			curr_headtex = document.getElementById("range4").value
+			updateCode();
 			var texture2 = tgaloader.load( 'models/textures/faces/Hum_Head_V'+currFaceTable[curr_headtex]+'_C0.tga' );
 			var material2 = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture2 } );
 			headmesh.traverse( function ( child ) {
@@ -218,10 +204,7 @@ function render()
 					if ( child instanceof THREE.Mesh) {
 						child.material = material2;
 					}
-				} );
-				
-				curr_headtex = document.getElementById("range4").value
-				updateCode();
+				} );	
 		}
 		if (curr_bodytex != document.getElementById("range3").value || curr_bodymodel != document.getElementById("range0").value || curr_headmodel != document.getElementById("range1").value || curr_outfit != document.getElementById("range6").value||outfit != document.getElementById("check2").checked)
 		{
@@ -401,7 +384,6 @@ function updateCode()
 	document.getElementById( 'label2' ).innerHTML = "Model głowy: "+v2;
 	document.getElementById( 'label3' ).innerHTML = "Textura ciała: "+currBodyTable[curr_bodytex];
 	document.getElementById( 'label4' ).innerHTML = "Textura twarzy: "+currFaceTable[curr_headtex];
-	document.getElementById( 'label5' ).innerHTML = "Grubość: "+document.getElementById("range2").value;
 	document.getElementById( 'label6' ).innerHTML = "Strój: "+armorname;
 	document.getElementById( 'code' ).value = 'B_SetNpcVisual 	(self, '+v1+', "'+v2+'", '+currFaceTable[curr_headtex]+', '+currBodyTable[curr_bodytex]+', '+v3+');\nMdl_SetModelFatness (self, '+document.getElementById("range2").value+');';
 
