@@ -399,7 +399,7 @@ function updateCode()
 }
 
 $("#generate-gif").click(function() {
-
+	$('#gif-link-container').prop('hidden', true);
 	$("#render-progress-bar-container").removeAttr("hidden");
 	
 	//$(".progress-bar-animated").css("width", "0%");
@@ -471,6 +471,8 @@ function uploadGif(gif) {
 	    	var link = json.success ? json.success.files.gif : "Error occured!";
 	    	console.log(request.responseText);
 	    	updateProgress("100");
+			$('#upload-progress-bar-container').prop('hidden', true);
+			$('#render-progress-bar-container').prop('hidden', true);
 	    	$("#gif-link-container").removeAttr("hidden");
 	    	$("#gif-link").val(link);
 	    }

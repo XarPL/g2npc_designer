@@ -7,9 +7,17 @@
 		<script src="js/jquery-3.3.1.min.js" ></script>
 		<script src="js/popper.min.js"></script>
 		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-		<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue_grey-blue.min.css" /> 
+		<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.light_green-lime.min.css" /> 
 		<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 		<script src="js/clipboard.min.js"></script>
+		<style>
+			html {color:#FFF;}
+			body {background-color:#303030;}
+			.mdl-card {border-radius: 0px; background-color:#424242;}
+			.mdl-grid {padding:0;}
+			.mdl-switch {margin:16px;}
+			.mdl-card__title {color:#FFF;}
+		</style>
 	</head>
 
 	<body>
@@ -37,10 +45,9 @@
 		  <main class="mdl-layout__content" style="overflow-y:hidden;">
 			<div class="page-content">
 				<div class="mdl-grid">
-					<div id="panel" style="width: calc(50% - 16px);overflow-y:scroll;height:89vh;" class="mdl-cell mdl-cell--6-col">						
+					<div id="panel" style="width: calc(50% - 16px);overflow-y:auto;height:89vh;margin:0;" class="mdl-cell mdl-cell--6-col">						
 							<div style="width:100%; min-height: 100px;" class="mdl-card mdl-shadow--2dp">
 								<div id="label1" class="mdl-card__title">
-									
 								</div>
 								<input id="range0" class="mdl-slider mdl-js-slider" type="range" min="1" max="2" value="2" step="1">
 							</div>
@@ -74,33 +81,38 @@
 								  </div>
 								<input id="range6" class="mdl-slider mdl-js-slider" type="range" min="0" max="12" value="0">
 							</div>
-						<div class="mdl-grid">
-						<div class="mdl-cell mdl-cell--6-col">
 							<div style="width:100%; min-height: 100px;" class="mdl-card mdl-shadow--2dp">
-							<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="check1">
-							  <input id="check1" type="checkbox" id="switch-1" class="mdl-switch__input" >
-							  <span class="mdl-switch__label">Obrót postaci</span>
-							</label>
-							<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="check2">
-							  <input id="check2" type="checkbox" id="switch-2" class="mdl-switch__input" checked>
-							  <span class="mdl-switch__label">Pokaż strój</span>
-							</label>
+								<div class="mdl-grid">
+									<div class="mdl-cell mdl-cell--4-col">
+										<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="check2">
+										  <input id="check2" type="checkbox" id="switch-2" class="mdl-switch__input" checked>
+										  <span class="mdl-switch__label">Pokaż strój</span>
+										  </label>
+										  <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="check1">
+										  <input id="check1" type="checkbox" id="switch-1" class="mdl-switch__input" >
+										  <span class="mdl-switch__label">Obrót postaci</span>
+										</label>
+									</div>
+									<div class="mdl-cell mdl-cell--8-col">
+										<span style="text-align: center;">Kod</span>
+										<div class="mdl-textfield mdl-js-textfield" style="width:100%; padding:0; border: 1px solid rgb(139,195,74)">
+											<textarea id="code" class="mdl-textfield__input" type="text" rows= "2" style="font-size:10px;"></textarea>
+										</div>
+										<button style="width:100%;" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" data-clipboard-target="#code">
+										<img src="assets/clippy.svg" width="24" alt="Copy to clipboard">
+											Kopiuj do schowka
+										</button>
+									</div>		
+								</div>
+							</div>
+						<div class="mdl-grid">
+						<div  class="mdl-cell mdl-cell--6-col">
 							<button id="generate-gif" class="btn mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
 							  Generuj GIF
 							</button>
-							</div>
-							<div style="width:100%; min-height: 100px;" class="mdl-card mdl-shadow--2dp">
-							<span style="text-align: center;">Kod</span>
-							  <div class="mdl-textfield mdl-js-textfield">
-								<textarea id="code" class="mdl-textfield__input" type="text" rows= "3" ></textarea>
-							  </div>
-							  <button class="btn mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" data-clipboard-target="#code">
-								 <img src="assets/clippy.svg" width="24" alt="Copy to clipboard">
-								Kopiuj do schowka
-								</button>
-							</div>		
 						</div>
 						<div  class="mdl-cell mdl-cell--6-col">
+							
 							<div hidden id="render-progress-bar-container" style="width:100%; min-height: 50px;" class="mdl-card mdl-shadow--2dp">
 								<div id="p1" class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
 								<div id="p1text"></div>
@@ -110,11 +122,11 @@
 								<div id="p2" class="mdl-progress mdl-js-progress"></div>
 								<div id="p2text"></div>
 							</div>
-							<div hidden class="input-group" id="gif-link-container">
-							  <input id="gif-link" class="form-control" aria-label="With input"></input>
-							  <button class="btn mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" data-clipboard-target="#gif-link">
-								 <img src="assets/clippy.svg" width="24" alt="Copy to clipboard">
-								Kopiuj do schowka
+							<div hidden style="width:100%; min-height: 50px;" class="mdl-card mdl-shadow--2dp" id="gif-link-container">
+								<textarea id="gif-link" class="mdl-textfield__input" type="text" rows= "2" style="font-size:10px;"></textarea>
+								<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" data-clipboard-target="#gif-link">
+									<img src="assets/clippy.svg" width="24" alt="Copy to clipboard">
+									Kopiuj do schowka
 								</button>
 							</div>
 						</div>
