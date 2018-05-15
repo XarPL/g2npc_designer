@@ -1,5 +1,4 @@
 ﻿var GIF = require('gl-gif'); 
-
 var clipboard = new ClipboardJS('.btn');
 
 var container, controls;
@@ -135,7 +134,7 @@ function refreshNPC()
 function init() 
 {
 	container = document.getElementById( 'render' );
-	document.getElementById( 'panel' ).style.height = window.innerHeight-100 + "px";
+	document.getElementById( 'panel' ).style.height = window.innerHeight-60 + "px";
 	camera = new THREE.PerspectiveCamera( 60, window.innerWidth/2 / (window.innerHeight-60), 0.1, 10 );
 	camera.position.z = 2;
 	camera.position.y = -0.2;
@@ -171,7 +170,7 @@ function auto_resize()
 }
 function render() 
 {
-	document.getElementById( 'panel' ).style.height = window.innerHeight-100 + "px";
+	document.getElementById( 'panel' ).style.height = window.innerHeight-60 + "px";
 	if (headid != -1 && bodyid != -1)
 	{
 		for ( var i = 0, l = scene.children.length; i < l; i ++ ) 
