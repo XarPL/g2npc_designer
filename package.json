@@ -18,6 +18,7 @@
   "homepage": "https://github.com/Xardas49/g2npc_designer#readme",
   "devDependencies": {},
   "dependencies": {
+    "bootstrap": "^4.1.1",
     "gl-gif": "^3.1.0"
   }
 }

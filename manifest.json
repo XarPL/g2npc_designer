@@ -6,7 +6,7 @@
     "display": "standalone",
     "start_url": "index.html",
     "short_name": "G2NPC Designer",
-    "theme_color": "#b3d4fc",
+    "theme_color": "#0f0f0f",
     "description": "Gothic 2 NPC designer based on three.js and mdl",
     "orientation": "any",
     "background_color": "#303030",

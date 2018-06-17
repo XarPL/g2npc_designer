@@ -13,6 +13,6 @@ Newest version: https://xardas49.github.io/g2npc_designer/
 `npm install`
 
 3. Make changes to your project
-4. Run browserify and make sure `js/bundle.js` is commited
+4. Run build.cmd and make sure `js/bundle.js` is commited
 
 `browserify index.js -o js/bundle.js`

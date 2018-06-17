@@ -23,35 +23,59 @@
 		<script src="js/manup.min.js"></script>
 		<script src="js/jquery-3.3.1.min.js" ></script>
 		<script src="js/popper.min.js"></script>
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-		 <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue_grey-orange.min.css" /> 
+		<link rel="stylesheet" href="material-design-lite.css" /> 
 		<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 		<script src="js/clipboard.min.js"></script>
 		<style>
 			html {color:#FFF;}
 			body {background-color:#303030;}
-			.mdl-card {border-radius: 0px; background-color:#424242;}
+			.mdl-card {border-radius: 0px; background-color:#424242; padding:10px; min-height:10px;}
+			.select:hover {background-color:#202020; }
 			.mdl-grid {padding:0;}
 			.mdl-switch {margin:16px;}
 			.mdl-card__title {color:#FFF;}
+			.mdl-textfield {width:100%;}
+			.mdl-textfield__label {color:white;}
+			.mdl-textfield--floating-label.is-focused .mdl-textfield__label, .mdl-textfield--floating-label.is-dirty .mdl-textfield__label, .mdl-textfield--floating-label.has-placeholder .mdl-textfield__label 
+			{
+				color: white;
+			}
+			.button-inline
+			{
+				min-width: 5px;
+			}
+			.mdl-checkbox.is-checked .mdl-checkbox__box-outline {
+				border: 2px solid rgb(200, 90, 0);
+			}
 		</style>
 	</head>
 
 	<body>
-		<!-- Always shows a header, even in smaller screens. -->
+		<!-- Always shows a header, even in smaller screens.rgb(200, 90, 0) -->
 		<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-		  <header class="mdl-layout__header">
-			<div class="mdl-layout__header-row">
-			  <!-- Title -->
-			  <span class="mdl-layout-title">Gothic II Npc Designer</span>
-			  <!-- Add spacer, to align navigation to the right -->
-			  <div class="mdl-layout-spacer"></div>
-			  <!-- Navigation. We hide it in small screens. -->
-			  <nav class="mdl-navigation mdl-layout--large-screen-only">
-				<a class="mdl-navigation__link" href="https://github.com/Xardas49/g2npc_designer"><img height="32" width="32" src="assets/github.svg" /></a>
-			  </nav>
-			</div>
-		  </header>
+			<header class="mdl-layout__header">
+				<div class="mdl-layout__header-row">
+				  <!-- Title -->
+				  <span class="mdl-layout-title">Gothic II Npc Designer</span>
+				  <!-- Add spacer, to align navigation to the right -->
+				  <div class="mdl-layout-spacer"></div>
+				  <!-- Navigation. We hide it in small screens. -->
+				  <nav class="mdl-navigation mdl-layout--large-screen-only">
+					<a class="mdl-navigation__link" href="https://github.com/Xardas49/g2npc_designer"><img height="32" width="32" src="assets/github.svg" /></a>
+				  </nav>
+				</div>
+				<div class="mdl-layout__tab-bar mdl-js-ripple-effect">
+					<a href="#scroll-tab-1" class="mdl-layout__tab is-active">Ogólne</a>
+					<a href="#scroll-tab-2" class="mdl-layout__tab">Atrybuty</a>
+					<a href="#scroll-tab-3" class="mdl-layout__tab">Wygląd</a>
+					<a href="#scroll-tab-4" class="mdl-layout__tab">Ekwipunek</a>
+					<a href="#scroll-tab-5" class="mdl-layout__tab">Rutyna</a>
+					<a href="#scroll-tab-6" class="mdl-layout__tab">Kod</a>
+				</div>
+			</header>
+		  
 		  <div class="mdl-layout__drawer mdl-navigation mdl-layout--small-screen-only">
 			<span class="mdl-layout-title">Gothic II Npc Designer</span>
 			<nav class="mdl-navigation">
@@ -62,43 +86,250 @@
 		  <main class="mdl-layout__content" style="overflow-y:hidden;">
 			<div class="page-content">
 				<div class="mdl-grid">
-					<div id="panel" style="width: calc(50% - 16px);overflow-y:auto;height:89vh;margin:0;" class="mdl-cell mdl-cell--6-col">						
-							<div style="width:100%; min-height: 100px;" class="mdl-card mdl-shadow--2dp">
-								<div id="label1" class="mdl-card__title">
+					<div id="panel" style="width: calc(50% - 16px);overflow-y:auto;height:89vh;margin:0;" class="mdl-cell mdl-cell--6-col">	
+							<section class="mdl-layout__tab-panel is-active" id="scroll-tab-1">
+							<div class="page-content">
+								<div style="width:100%;" class="mdl-card select">
+									<div id="" class="mdl-card__title">
+									Imię:
+									</div>
+									<input type="text" id="input_name" />
 								</div>
-								<input id="range0" class="mdl-slider mdl-js-slider" type="range" min="1" max="2" value="2" step="1">
+								<div style="width:100%; min-height: 100px;" class="mdl-card select">
+								<div id="label1" class="mdl-card__title">
+									Płeć: 
+								</div>
+								<select id="range0" class="" type="range" min="1" max="2" value="2" step="1">
+									<option value="1">Kobieta</option>
+								  <option value="2">Mężczyzna</option>
+								  </select>
+								</div>
+								<div style="width:100%; min-height: 100px;" class="mdl-card select">
+								<div id="" class="mdl-card__title">
+								Gildia:
+								</div>
+								<select id="input_guild">
+								  <option value="NONE">Brak</option>
+								  <option value="BAU">Farmer</option>
+								  <option value="VLK">Obywatel</option>
+								  <option value="MIL">Strażnik</option>
+								  <option value="PAL">Paladyn</option>
+								  <option value="KDF">Mag Ognia</option>
+								  <option value="KDW">Mag Wody</option>
+								  <option value="NOV">Nowicjusz</option>
+								  <option value="DJG">Łowca Smoków</option>
+								  <option value="SLD">Najemnik</option>
+								  <option value="BDT">Bandyta</option>
+								  <option value="STRF">Skazaniec</option>
+								  <option value="DMT">Poszukiwacz</option>
+								  <option value="OUT">Mieszkaniec</option>
+								  <option value="PIR">Pirat</option>
+								</select>
+								</div>
+								<div style="width:100%; min-height: 100px;" class="mdl-card select">
+								<div id="" class="mdl-card__title">
+								ID:
+								</div>
+								<input id="input_id" class="" type="number" min="0">
+								</div>
+								
+								<div style="width:100%; min-height: 100px;" class="mdl-card select">
+								<div id="" class="mdl-card__title">
+								Typ NPC:
+								</div>
+								<select id="input_type">
+								  <option value="MAIN">Główny</option>
+								  <option value="AMBIENT">Otoczenie</option>
+								  <option value="FRIEND">Przyjaciel</option>
+								</select>
+								</div>
+								<div style="width:100%; min-height: 100px;" class="mdl-card select">
+								<div id="" class="mdl-card__title">
+								Głos:
+								</div>
+									<input id="input_voice" class="" type="number" min="0">
+									<button id="voice_play"class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+									  <i class="material-icons">record_voice_over</i>
+									</button>	
+									<audio id="voice_audio">
+									  <source src="voices/SVM_1_WISEMOVE.mp3" type="audio/mpeg">
+									</audio>
+								</div>
+								<div style="width:100%;" class="mdl-card select">
+								<div id="" class="mdl-card__title">
+									
+									<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-1">
+									  <input type="checkbox" id="checkbox-1" class="mdl-checkbox__input">
+									  <span class="mdl-checkbox__label">Nieśmiertelny</span>
+									</label>
+									<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-2">
+									  <input type="checkbox" id="checkbox-2" class="mdl-checkbox__input">
+									  <span class="mdl-checkbox__label">Duch</span>
+									</label>
+								</div>
+								</div>
 							</div>
-							<div style="width:100%; min-height: 100px;" class="mdl-card mdl-shadow--2dp">
+							
+							</section>
+							<section class="mdl-layout__tab-panel" id="scroll-tab-2">
+							<div style="width:100%; min-height: 100px;" class="mdl-card select">
+								<div id="" class="mdl-card__title">
+									<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-3">
+									  <input type="checkbox" id="checkbox-3" class="mdl-checkbox__input">
+									  <span class="mdl-checkbox__label">Dostosuj atrybuty do rozdziału (0-6)</span>
+									</label>
+									<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-4">
+									  <input type="checkbox" id="checkbox-4" class="mdl-checkbox__input">
+									  <span class="mdl-checkbox__label">Dodaj umiejętności dla NPC</span>
+									</label>
+								</div>
+									<input id="input_statchapter" class="" type="number" min="0" max="6">
+								</div>
+								<div style="width:100%; min-height: 100px;" class="mdl-card select">
+									<div id="" class="mdl-card__title">
+									Punkty trafień:
+									</div>
+									<input id="input_hp" class="" type="number" min="0" >
+								</div>
+								<div style="width:100%; min-height: 100px;" class="mdl-card select">
+									<div id="" class="mdl-card__title">
+									Siła:
+									</div>
+									<input id="input_str" class="" type="number" min="0">
+								</div>
+								<div style="width:100%; min-height: 100px;" class="mdl-card select">
+									<div id="" class="mdl-card__title">
+									Zręczność:
+									</div>
+									<input id="input_dex" class="" type="number" min="0">
+								</div>
+								<div style="width:100%; min-height: 100px;" class="mdl-card select">
+									<div id="" class="mdl-card__title">
+									Mana:
+									</div>
+									<input id="input_mana" class="" type="number" min="0">
+								</div>
+								<div id="skills" style="width:100%; min-height: 100px;" class="mdl-card select">
+									<div class="mdl-card__title">
+									Umiejętności:
+									</div>
+									<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="skill-1">
+									  <input type="checkbox" id="skill-1" class="mdl-checkbox__input">
+									  <span class="mdl-checkbox__label">Otwieranie zamków</span>
+									</label>
+									<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="skill-1">
+									  <input type="checkbox" id="skill-1" class="mdl-checkbox__input">
+									  <span class="mdl-checkbox__label">Skradanie się</span>
+									</label>
+									<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="skill-1">
+									  <input type="checkbox" id="skill-1" class="mdl-checkbox__input">
+									  <span class="mdl-checkbox__label">Akrobatyka</span>
+									</label>
+									<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="skill-1">
+									  <input type="checkbox" id="skill-1" class="mdl-checkbox__input">
+									  <span class="mdl-checkbox__label">Kradzież kieszonkowa</span>
+									</label>
+									<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="skill-1">
+									  <input type="checkbox" id="skill-1" class="mdl-checkbox__input">
+									  <span class="mdl-checkbox__label">Kowalstwo</span>
+									</label>
+									<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="skill-1">
+									  <input type="checkbox" id="skill-1" class="mdl-checkbox__input">
+									  <span class="mdl-checkbox__label">Tworzenie run</span>
+									</label>
+									<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="skill-1">
+									  <input type="checkbox" id="skill-1" class="mdl-checkbox__input">
+									  <span class="mdl-checkbox__label">Alchemia</span>
+									</label>
+								</div>
+								<div id="trophy" style="width:100%; min-height: 100px;" class="mdl-card select">
+									<div class="mdl-card__title">
+									Pozyskiwanie trofeów:
+									</div>
+									<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="trophy-1">
+									  <input type="checkbox" id="trophy-1" class="mdl-checkbox__input">
+									  <span class="mdl-checkbox__label">Kły</span>
+									</label>
+									<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="trophy-1">
+									  <input type="checkbox" id="trophy-1" class="mdl-checkbox__input">
+									  <span class="mdl-checkbox__label">Pazury</span>
+									</label>
+									<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="trophy-1">
+									  <input type="checkbox" id="trophy-1" class="mdl-checkbox__input">
+									  <span class="mdl-checkbox__label">Skóry</span>
+									</label>
+									<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="trophy-1">
+									  <input type="checkbox" id="trophy-1" class="mdl-checkbox__input">
+									  <span class="mdl-checkbox__label">Jaszurze skóry</span>
+									</label>
+									<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="trophy-1">
+									  <input type="checkbox" id="trophy-1" class="mdl-checkbox__input">
+									  <span class="mdl-checkbox__label">Serca</span>
+									</label>
+									<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="trophy-1">
+									  <input type="checkbox" id="trophy-1" class="mdl-checkbox__input">
+									  <span class="mdl-checkbox__label">Rogi cieniostwora</span>
+									</label>
+									<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="trophy-1">
+									  <input type="checkbox" id="trophy-1" class="mdl-checkbox__input">
+									  <span class="mdl-checkbox__label">Języki jaszurów</span>
+									</label>
+									<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="trophy-1">
+									  <input type="checkbox" id="trophy-1" class="mdl-checkbox__input">
+									  <span class="mdl-checkbox__label">Skrzydła</span>
+									</label>
+									<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="trophy-1">
+									  <input type="checkbox" id="trophy-1" class="mdl-checkbox__input">
+									  <span class="mdl-checkbox__label">Żądła</span>
+									</label>
+									<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="trophy-1">
+									  <input type="checkbox" id="trophy-1" class="mdl-checkbox__input">
+									  <span class="mdl-checkbox__label">Żuwaczki</span>
+									</label>
+									<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="trophy-1">
+									  <input type="checkbox" id="trophy-1" class="mdl-checkbox__input">
+									  <span class="mdl-checkbox__label">Pancerze pełzacza</span>
+									</label>
+									<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="trophy-1">
+									  <input type="checkbox" id="trophy-1" class="mdl-checkbox__input">
+									  <span class="mdl-checkbox__label">Rogi zębacza</span>
+									</label>
+								</div>
+							</section>
+							<section class="mdl-layout__tab-panel" id="scroll-tab-3">
+							<div class="page-content">
+							
+							<div style="width:100%; min-height: 100px;" class="mdl-card select">
 								<div id="label2" class="mdl-card__title">
 									
 								  </div>
-								<input id="range1" class="mdl-slider mdl-js-slider" type="range" min="1" max="16" value="12" step="1">
+								<input id="range1" class="" type="range" min="1" max="16" value="12" step="1">
 							</div>
-							<div style="width:100%; min-height: 100px;" class="mdl-card mdl-shadow--2dp">
+							<div style="width:100%; min-height: 100px;" class="mdl-card select">
 								<div id="label3" class="mdl-card__title">
 									
 								  </div>
-								<input id="range3" class="mdl-slider mdl-js-slider" type="range" min="0" max="12" value="0">
+								<input id="range3" class="" type="range" min="0" max="12" value="0">
 							</div>
-							<div style="width:100%; min-height: 100px;" class="mdl-card mdl-shadow--2dp">
+							<div style="width:100%; min-height: 100px;" class="mdl-card select">
 								<div id="label4" class="mdl-card__title">
 									
 								</div>
-								<input id="range4" class="mdl-slider mdl-js-slider" type="range" min="0" max="162" value="0" step="1">
+								<input id="range4" class="" type="range" min="0" max="162" value="0" step="1">
 							</div>
-							<div style="width:100%; min-height: 100px;" class="mdl-card mdl-shadow--2dp">
+							<div style="width:100%; min-height: 100px;" class="mdl-card select">
 								<div id="label5" class="mdl-card__title">
 									
 								  </div>
-								<input id="range2" class="mdl-slider mdl-js-slider" type="range" min="0.7" max="1.3" value="1" step="0.1">
+								<input id="range2" class="" type="range" min="0.7" max="1.3" value="1" step="0.1">
 							</div>
-							<div style="width:100%; min-height: 100px;" class="mdl-card mdl-shadow--2dp">
+							<div style="width:100%; min-height: 100px;" class="mdl-card select">
 								<div id="label6" class="mdl-card__title">
 									
 								  </div>
-								<input id="range6" class="mdl-slider mdl-js-slider" type="range" min="0" max="12" value="0">
+								<input id="range6" class="" type="range" min="0" max="12" value="0">
 							</div>
-							<div style="width:100%; min-height: 100px;" class="mdl-card mdl-shadow--2dp">
+							<div style="width:100%; min-height: 100px;" class="mdl-card">
 								<div class="mdl-grid">
 									<div class="mdl-cell mdl-cell--4-col">
 										<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="check2">
@@ -110,16 +341,7 @@
 										  <span class="mdl-switch__label">Obrót postaci</span>
 										</label>
 									</div>
-									<div class="mdl-cell mdl-cell--8-col">
-										<span style="text-align: center;">Kod</span>
-										<div class="mdl-textfield mdl-js-textfield" style="width:100%; padding:0; border: 1px solid rgb(96,125,139);">
-											<textarea id="code" class="mdl-textfield__input" type="text" rows= "2" style="font-size:10px;"></textarea>
-										</div>
-										<button style="width:100%;" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" data-clipboard-target="#code">
-										<img src="assets/clippy.svg" width="24" alt="Copy to clipboard">
-											Kopiuj do schowka
-										</button>
-									</div>		
+										
 								</div>
 							</div>
 						<div class="mdl-grid">
@@ -128,6 +350,8 @@
 							  Generuj GIF
 							</button>
 						</div>
+						</div>
+							
 						<div  class="mdl-cell mdl-cell--6-col">
 							
 							<div hidden id="render-progress-bar-container" style="width:100%; min-height: 50px;" class="mdl-card mdl-shadow--2dp">
@@ -148,6 +372,26 @@
 							</div>
 						</div>
 						</div>
+						</section>
+						<section class="mdl-layout__tab-panel" id="scroll-tab-4">
+							EQ - coming soon
+						</section>
+						<section class="mdl-layout__tab-panel" id="scroll-tab-5">
+							Rutyny - coming soon
+						</section>
+						<section class="mdl-layout__tab-panel" id="scroll-tab-6">
+							<div class="page-content">
+								<div style="width:100%; min-height: 100px;" class="mdl-card select">
+								<div class="mdl-textfield mdl-js-textfield" style="width:100%; padding:0; border: 1px solid rgb(15,15,15);">
+								<textarea id="code" class="mdl-textfield__input" type="text" rows= "20" style="font-size:12px;"></textarea>
+								</div>
+								<button style="width:100%;" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" data-clipboard-target="#code">
+								<img src="assets/clippy.svg" width="24" alt="Copy to clipboard">
+								Kopiuj do schowka
+								</button>
+								</div>
+							</div>
+						</section>
 					</div>
 					<div style="width: calc(50% - 16px); height:89vh;" class="mdl-cell mdl-cell--6-col">
 						<div id="render"></div>

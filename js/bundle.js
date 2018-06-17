@@ -4,6 +4,8 @@ var clipboard = new ClipboardJS('.btn');
 
 var container, controls;
 var camera, scene, renderer;
+var curr_name, curr_guild, curr_id, curr_voice, curr_flags, curr_npctype;
+var auto_att, auto_talents;
 var bodyid,headid;
 var curr_bodytex, curr_headtex, curr_bodymodel, curr_headmodel, curr_outfit;
 var outfit = true;
@@ -29,7 +31,7 @@ var noop = function() {};
 var renderGif = noop;
 if (!window.location.hash)
 {
-	window.location.hash = "2-1-0-0-0-true";
+	window.location.hash = "2-1-0-0-2-true";
 }
 if (window.location.hash) {
 	permalink = window.location.hash.substring(1).split('-');
@@ -135,8 +137,8 @@ function refreshNPC()
 function init() 
 {
 	container = document.getElementById( 'render' );
-	document.getElementById( 'panel' ).style.height = window.innerHeight-60 + "px";
-	camera = new THREE.PerspectiveCamera( 60, window.innerWidth/2 / (window.innerHeight-60), 0.1, 10 );
+	document.getElementById( 'panel' ).style.height = window.innerHeight-112 + "px";
+	camera = new THREE.PerspectiveCamera( 60, window.innerWidth/2 / (window.innerHeight-112), 0.1, 10 );
 	camera.position.z = 2;
 	camera.position.y = -0.2;
 	scene = new THREE.Scene();
@@ -148,7 +150,7 @@ function init()
 	
 	renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 	renderer.setPixelRatio( window.devicePixelRatio );
-	renderer.setSize( window.innerWidth/2, window.innerHeight-60 );
+	renderer.setSize( window.innerWidth/2, window.innerHeight-112 );
 	container.appendChild( renderer.domElement );
 	controls = new THREE.OrbitControls(camera, renderer.domElement);
 	controls.addEventListener( 'change', render );
@@ -158,20 +160,20 @@ function init()
 function resize(width, height) 
 {
 	var width = width || (window.innerWidth/2);
-	var height = height || (window.innerHeight-60);
+	var height = height || (window.innerHeight-112);
 	camera.aspect = width / height;
 	camera.updateProjectionMatrix();
 	renderer.setSize( width, height );
 }
 function auto_resize() 
 {
-	camera.aspect = window.innerWidth/2 / (window.innerHeight-60);
-	renderer.setSize( window.innerWidth/2, window.innerHeight-60 );
+	camera.aspect = window.innerWidth/2 / (window.innerHeight-112);
+	renderer.setSize( window.innerWidth/2, window.innerHeight-112 );
 	camera.updateProjectionMatrix();
 }
 function render() 
 {
-	document.getElementById( 'panel' ).style.height = window.innerHeight-60 + "px";
+	document.getElementById( 'panel' ).style.height = window.innerHeight-112 + "px";
 	if (headid != -1 && bodyid != -1)
 	{
 		for ( var i = 0, l = scene.children.length; i < l; i ++ ) 
@@ -225,16 +227,64 @@ function render()
 				//refreshNPC();		
 			}
 		}
+		//else if (curr_name != document.getElementById( 'input_name' ).value || curr_guild != document.getElementById( 'input_guild' ).value || curr_id != document.getElementById( 'input_id' ).value)
+		//{
+			
+			updateCode();
+		//}
+		
 		renderer.render( scene, camera );
 	}
 }
 function updateCode()
 {
+	curr_name = document.getElementById( 'input_name' ).value;
+	curr_guild = document.getElementById( 'input_guild' ).value;
+	curr_id =  document.getElementById( 'input_id' ).value;
+	curr_voice = document.getElementById( 'input_voice' ).value;
+	auto_att = document.getElementById("checkbox-3").checked;
+	auto_talents = document.getElementById("checkbox-4").checked;
+	if (auto_att == true)
+	{
+		document.getElementById("input_hp").setAttribute("disabled", "");
+		document.getElementById("input_str").setAttribute("disabled", "");
+		document.getElementById("input_dex").setAttribute("disabled", "");
+		document.getElementById("input_mana").setAttribute("disabled", "");
+		document.getElementById("input_statchapter").removeAttribute("disabled", "");
+	}else{
+		document.getElementById("input_hp").removeAttribute("disabled", "");
+		document.getElementById("input_str").removeAttribute("disabled", "");
+		document.getElementById("input_dex").removeAttribute("disabled", "");
+		document.getElementById("input_mana").removeAttribute("disabled", "");
+		document.getElementById("input_statchapter").setAttribute("disabled", "");
+	}
+	if (auto_talents == true)
+	{
+		document.getElementById("skills").setAttribute("hidden", "");
+	}
+	else
+	{
+		document.getElementById("skills").removeAttribute("hidden", "");
+	}
+	if (document.getElementById("checkbox-1").checked == true)
+	{
+		curr_flags = "NPC_FLAG_IMMORTAL";
+		if (document.getElementById("checkbox-2").checked == true)
+		{
+			curr_flags += "|NPC_FLAG_GHOST"
+		}
+	}
+	else if (document.getElementById("checkbox-2").checked == true)
+	{
+		curr_flags = "NPC_FLAG_GHOST";
+	}
+	else curr_flags = "0";
+	curr_npctype = "NPCTYPE_"+document.getElementById( 'input_type' ).value;
 	var v1, v2, v3, armorname;
 	if (curr_bodymodel == 1)
 	{ 
 		v1 = "FEMALE"; 
-		document.getElementById( 'label1' ).innerHTML = "Model ciała: Żeński";
+		//document.getElementById( 'label1' ).innerHTML = "Model ciała: Żeński";
 		currBodyTable = BodyTableFemale;
 		currHeadTable = HeadTableFemale;
 		currFaceTable = FaceTableFemale;
@@ -242,7 +292,7 @@ function updateCode()
 	else 
 	{
 		v1 = "MALE";
-		document.getElementById( 'label1' ).innerHTML = "Model ciała: Męski";
+		//document.getElementById( 'label1' ).innerHTML = "Model ciała: Męski";
 		currBodyTable = BodyTableMale;
 		currHeadTable = HeadTableMale;
 		if (currBodyTable[curr_bodytex] == '0')
@@ -386,7 +436,7 @@ function updateCode()
 	document.getElementById( 'label3' ).innerHTML = "Textura ciała: "+currBodyTable[curr_bodytex];
 	document.getElementById( 'label4' ).innerHTML = "Textura twarzy: "+currFaceTable[curr_headtex];
 	document.getElementById( 'label6' ).innerHTML = "Strój: "+armorname;
-	document.getElementById( 'code' ).value = 'B_SetNpcVisual 	(self, '+v1+', "'+v2+'", '+currFaceTable[curr_headtex]+', '+currBodyTable[curr_bodytex]+', '+v3+');\nMdl_SetModelFatness (self, '+document.getElementById("range2").value+');';
+	document.getElementById( 'code' ).value = 'instance '+curr_guild+'_'+ curr_id +'_'+curr_name+ '\t(Npc_Default)\n{\n\tname\t= "' +curr_name+ '";\n\tguild\t= GIL_'+curr_guild+';\n\tid\t= '+curr_id+';\n\tvoice\t= '+curr_voice+';\n\tflags\t= '+curr_flags+';\n\tnpctype\t= '+curr_npctype+';\n\tB_SetNpcVisual 	(self, '+v1+', "'+v2+'", '+currFaceTable[curr_headtex]+', '+currBodyTable[curr_bodytex]+', '+v3+');\n\tMdl_SetModelFatness (self, '+document.getElementById("range2").value+');\n};';
 
 	permalink = [
 		curr_bodymodel, 
@@ -397,7 +447,15 @@ function updateCode()
 		outfit].join('-');
 	window.location.hash = permalink;
 }
+function playSound(path) {
 
+    document.getElementById( 'voice_audio' ).src = path;
+   document.getElementById( 'voice_audio' ).play();
+}
+// event listeners
+document.querySelector('#voice_play').addEventListener('click', function(){
+  playSound('voices/SVM_'+document.getElementById( 'input_voice' ).value+'_WISEMOVE.mp3');
+});
 $("#generate-gif").click(function() {
 	$('#gif-link-container').prop('hidden', true);
 	$("#render-progress-bar-container").removeAttr("hidden");
