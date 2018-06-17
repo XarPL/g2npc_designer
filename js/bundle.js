@@ -6,6 +6,8 @@ var container, controls;
 var camera, scene, renderer;
 var curr_name, curr_guild, curr_id, curr_voice, curr_flags, curr_npctype;
 var auto_att, auto_talents;
+var curr_att;
+var hp,str,dex,mana;
 var bodyid,headid;
 var curr_bodytex, curr_headtex, curr_bodymodel, curr_headmodel, curr_outfit;
 var outfit = true;
@@ -244,6 +246,7 @@ function updateCode()
 	curr_voice = document.getElementById( 'input_voice' ).value;
 	auto_att = document.getElementById("checkbox-3").checked;
 	auto_talents = document.getElementById("checkbox-4").checked;
+	curr_npctype = "NPCTYPE_"+document.getElementById( 'input_type' ).value;
 	if (auto_att == true)
 	{
 		document.getElementById("input_hp").setAttribute("disabled", "");
@@ -266,6 +269,11 @@ function updateCode()
 	{
 		document.getElementById("skills").removeAttribute("hidden", "");
 	}
+	hp = document.getElementById( 'input_hp' ).value;
+	str = document.getElementById( 'input_str' ).value;
+	dex = document.getElementById( 'input_dex' ).value;
+	mana = document.getElementById( 'input_mana' ).value;
+	
 	if (document.getElementById("checkbox-1").checked == true)
 	{
 		curr_flags = "NPC_FLAG_IMMORTAL";
@@ -279,7 +287,21 @@ function updateCode()
 		curr_flags = "NPC_FLAG_GHOST";
 	}
 	else curr_flags = "0";
-	curr_npctype = "NPCTYPE_"+document.getElementById( 'input_type' ).value;
+	
+	if (document.getElementById("checkbox-3").checked == true)
+	{
+		curr_att = "B_SetAttributesToChapter (self, "+document.getElementById("input_statchapter").value+");"
+	}
+	else
+	{
+		curr_att = "attribute[ATR_STRENGTH]\t= "+str+";\n\tattribute[ATR_DEXTERITY]\t= "+dex+";\n\tattribute[ATR_MANA_MAX]\t= "+mana+";\n\tattribute[ATR_MANA]\t= "+mana+";\n\tattribute[ATR_HITPOINTS_MAX]\t= "+hp+";\n\tattribute[ATR_HITPOINTS]\t= "+hp+";";
+	}
+	curr_att += "\n\tfight_tactic\t= FAI_HUMAN_"+document.getElementById("input_fight").value+";"
+	if (document.getElementById("checkbox-4").checked == true)
+	{
+		curr_att += "\n\tB_GiveNpcTalents (self);";
+	}
+	
 	var v1, v2, v3, armorname;
 	if (curr_bodymodel == 1)
 	{ 
@@ -432,11 +454,11 @@ function updateCode()
 			armorname = "Kaftan gubernatora";
 			break;
 	}
-	document.getElementById( 'label2' ).innerHTML = "Model głowy: "+v2;
-	document.getElementById( 'label3' ).innerHTML = "Textura ciała: "+currBodyTable[curr_bodytex];
-	document.getElementById( 'label4' ).innerHTML = "Textura twarzy: "+currFaceTable[curr_headtex];
+	document.getElementById( 'label2' ).innerHTML = "Kształt głowy: "+v2;
+	document.getElementById( 'label3' ).innerHTML = "Karnacja: "+currBodyTable[curr_bodytex];
+	document.getElementById( 'label4' ).innerHTML = "Twarz: "+currFaceTable[curr_headtex];
 	document.getElementById( 'label6' ).innerHTML = "Strój: "+armorname;
-	document.getElementById( 'code' ).value = 'instance '+curr_guild+'_'+ curr_id +'_'+curr_name+ '\t(Npc_Default)\n{\n\tname\t= "' +curr_name+ '";\n\tguild\t= GIL_'+curr_guild+';\n\tid\t= '+curr_id+';\n\tvoice\t= '+curr_voice+';\n\tflags\t= '+curr_flags+';\n\tnpctype\t= '+curr_npctype+';\n\tB_SetNpcVisual 	(self, '+v1+', "'+v2+'", '+currFaceTable[curr_headtex]+', '+currBodyTable[curr_bodytex]+', '+v3+');\n\tMdl_SetModelFatness (self, '+document.getElementById("range2").value+');\n};';
+	document.getElementById( 'code' ).value = 'instance '+curr_guild+'_'+ curr_id +'_'+curr_name+ '\t(Npc_Default)\n{\n\tname\t= "' +curr_name+ '";\n\tguild\t= GIL_'+curr_guild+';\n\tid\t= '+curr_id+';\n\tvoice\t= '+curr_voice+';\n\tflags\t= '+curr_flags+';\n\tnpctype\t= '+curr_npctype+';\n\t'+curr_att+'\n\tB_SetNpcVisual 	(self, '+v1+', "'+v2+'", '+currFaceTable[curr_headtex]+', '+currBodyTable[curr_bodytex]+', '+v3+');\n\tMdl_SetModelFatness (self, '+document.getElementById("range2").value+');\n};';
 
 	permalink = [
 		curr_bodymodel, 
