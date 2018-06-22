@@ -28,6 +28,7 @@
 		<link rel="stylesheet" href="material-design-lite.css" /> 
 		<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 		<script src="js/clipboard.min.js"></script>
+		<script src="js/diacritics.js"></script>
 		<style>
 			html {color:#FFF;}
 			body {background-color:#303030;}
@@ -48,6 +49,20 @@
 			}
 			.mdl-checkbox.is-checked .mdl-checkbox__box-outline {
 				border: 2px solid rgb(200, 90, 0);
+			}
+			.mdl-switch {
+				width: auto;
+			}
+			.flex
+			{
+				display: flex;
+				flex-wrap: wrap;
+
+			}
+			.centeralign
+			{
+				align-self: center;
+				text-align: center;
 			}
 		</style>
 	</head>
@@ -157,7 +172,6 @@
 								</div>
 								<div style="width:100%;" class="mdl-card select">
 								<div id="" class="mdl-card__title">
-									
 									<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-1">
 									  <input type="checkbox" id="checkbox-1" class="mdl-checkbox__input">
 									  <span class="mdl-checkbox__label">Nieśmiertelny</span>
@@ -344,16 +358,13 @@
 									<input id="check2" type="checkbox" id="switch-2" class="mdl-switch__input" checked>
 									<span class="mdl-switch__label">Pokaż strój</span>
 								</label>
-								<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="check1">
-								  <input id="check1" type="checkbox" id="switch-1" class="mdl-switch__input" >
-								  <span class="mdl-switch__label">Obrót postaci</span>
-								</label>
+								<button id="generate-gif" class="btn mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
+									  Generuj GIF
+								</button>
 							</div>
 						<div class="mdl-grid">
 						<div  class="mdl-cell mdl-cell--6-col">
-							<button id="generate-gif" class="btn mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
-							  Generuj GIF
-							</button>
+							
 						</div>
 						</div>
 							
@@ -378,17 +389,57 @@
 						</div>
 						</div>
 						</section>
-						<section class="mdl-layout__tab-panel" id="scroll-tab-4">
-							EQ - coming soon
+						<section class="mdl-layout__tab-panel flex" id="scroll-tab-4">
+							<div class="flex">
+								<div style="width:50%; min-height: 100px;" class="mdl-card select">
+									<div class="mdl-card__title">
+									Broń do walki w zwarciu:
+									</div>
+									<select id="input_melee">
+										<option value="NONE">Brak</option>
+										<option value="ItMw_1h_Vlk_Dagger+Sztylet">Sztylet</option>
+										<option value="ItMw_1H_Mace_L_01+Pogrzebacz">Pogrzebacz</option>
+										<option value="ItMw_1h_Bau_Axe+Sierp">Sierp</option>
+										<option value="ItMw_1h_Vlk_Mace+Laska">Laska</option>
+										<option value="ItMw_1H_Mace_L_03+Pałka">Pałka</option>
+										<option value="ItMw_1h_Bau_Mace+Laga">Laga</option>
+										<option value="ItMw_1h_Vlk_Axe+Topór">Topór</option>
+										<option value="ItMw_1H_Mace_L_04+Młot_kowalski">Młot kowalski</option>
+										<option value="ItMw_ShortSword1+Krótki_miecz_straży">Krótki miecz straży</option>
+										<option value="ItMw_Nagelknueppel+Maczuga_z_kolcami">Maczuga z kolcami</option>
+									</select>
+									<img id="meleeimg" class="centeralign" src="" width="120px;" />
+									<a class="centeralign" id="meleelink"href="">Informacje o broni</a>
+								</div>
+								<div style="width:50%;min-height: 100px;" class="mdl-card select">
+									<div class="mdl-card__title">
+									Broń dystansowa:
+									</div>
+									<select id="input_ranged">
+										<option value="NONE">Brak</option>
+										<option value="ItRw_Mil_Crossbow+Kusza_1">Kusza I</option>
+										<option value="ItRw_Sld_Bow+Łuk">Łuk</option>
+										<option value="ItRw_Bow_L_02+Łuk_wierzbowy">Łuk wierzbowy</option>
+										<option value="ItRw_Bow_L_03+Łuk_myśliwski">Łuk myśliwski</option>
+										<option value="ItRw_Bow_L_04+Łuk_z_wiązu">Łuk z wiązu</option>
+									</select>
+									<img id="rangedimg" class="centeralign" src="" width="120px;" />
+									<a class="centeralign" id="rangedlink" href="">Informacje o broni</a>
+								</div>
+								<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-5">
+								  <input type="checkbox" id="checkbox-5" class="mdl-checkbox__input">
+								  <span class="mdl-checkbox__label">Dodaj losowy ekwipunek</span>
+								</label>
+							</div>
 						</section>
 						<section class="mdl-layout__tab-panel" id="scroll-tab-5">
 							Rutyny - coming soon
 						</section>
 						<section class="mdl-layout__tab-panel" id="scroll-tab-6">
 							<div class="page-content">
-								<div style="width:100%; min-height: 100px;" class="mdl-card select">
+								<div style="width:100%; min-height: 100px;" class="mdl-card">
 								<div class="mdl-textfield mdl-js-textfield" style="width:100%; padding:0; border: 1px solid rgb(15,15,15);">
-								<textarea id="code" class="mdl-textfield__input" type="text" rows= "20" style="font-size:12px;"></textarea>
+								<textarea id="code" class="mdl-textfield__input" type="text" rows= "35" style="font-size:12px;"></textarea>
 								</div>
 								<button style="width:100%;" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" data-clipboard-target="#code">
 								<img src="assets/clippy.svg" width="24" alt="Copy to clipboard">
@@ -400,6 +451,10 @@
 					</div>
 					<div style="width: calc(50% - 16px); height:89vh;" class="mdl-cell mdl-cell--6-col">
 						<div id="render"></div>
+						<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="check1">
+							<input id="check1" type="checkbox" id="switch-1" class="mdl-switch__input" >
+							<span class="mdl-switch__label">Obrót postaci</span>
+						</label>
 					</div>
 				</div>
 			</div>

@@ -7,6 +7,7 @@ var curr_name, curr_guild, curr_id, curr_voice, curr_flags, curr_npctype;
 var auto_att, auto_talents;
 var curr_att;
 var hp,str,dex,mana;
+var melee_name,ranged_name,melee_inst,ranged_inst, curr_inv;
 var bodyid,headid;
 var curr_bodytex, curr_headtex, curr_bodymodel, curr_headmodel, curr_outfit;
 var outfit = true;
@@ -139,7 +140,7 @@ function init()
 {
 	container = document.getElementById( 'render' );
 	document.getElementById( 'panel' ).style.height = window.innerHeight-112 + "px";
-	camera = new THREE.PerspectiveCamera( 60, window.innerWidth/2 / (window.innerHeight-112), 0.1, 10 );
+	camera = new THREE.PerspectiveCamera( 60, window.innerWidth/2 / (window.innerHeight-180), 0.1, 10 );
 	camera.position.z = 2;
 	camera.position.y = -0.2;
 	scene = new THREE.Scene();
@@ -151,7 +152,7 @@ function init()
 	
 	renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 	renderer.setPixelRatio( window.devicePixelRatio );
-	renderer.setSize( window.innerWidth/2, window.innerHeight-112 );
+	renderer.setSize( window.innerWidth/2, window.innerHeight-180 );
 	container.appendChild( renderer.domElement );
 	controls = new THREE.OrbitControls(camera, renderer.domElement);
 	controls.addEventListener( 'change', render );
@@ -161,15 +162,15 @@ function init()
 function resize(width, height) 
 {
 	var width = width || (window.innerWidth/2);
-	var height = height || (window.innerHeight-112);
+	var height = height || (window.innerHeight-180);
 	camera.aspect = width / height;
 	camera.updateProjectionMatrix();
 	renderer.setSize( width, height );
 }
 function auto_resize() 
 {
-	camera.aspect = window.innerWidth/2 / (window.innerHeight-112);
-	renderer.setSize( window.innerWidth/2, window.innerHeight-112 );
+	camera.aspect = window.innerWidth/2 / (window.innerHeight-180);
+	renderer.setSize( window.innerWidth/2, window.innerHeight-180 );
 	camera.updateProjectionMatrix();
 }
 function render() 
@@ -300,7 +301,41 @@ function updateCode()
 	{
 		curr_att += "\n\tB_GiveNpcTalents (self);";
 	}
-	
+	melee_inst = document.getElementById( 'input_melee' ).value.split("+")[0];
+	melee_name = document.getElementById( 'input_melee' ).value.split("+")[1];
+	ranged_inst = document.getElementById( 'input_ranged' ).value.split("+")[0];
+	ranged_name = document.getElementById( 'input_ranged' ).value.split("+")[1];
+	curr_inv = "";
+	if (document.getElementById( 'input_melee' ).value == "NONE")
+	{
+		document.getElementById( 'meleelink' ).setAttribute("hidden", "");
+		document.getElementById( 'meleeimg' ).setAttribute("hidden", "");
+		
+	}else
+	{
+		document.getElementById( 'meleelink' ).removeAttribute("hidden", "");
+		document.getElementById( 'meleeimg' ).removeAttribute("hidden", "");
+		document.getElementById( 'meleeimg' ).setAttribute("src", "http://www.gothic.phx.pl/gothic2/dane/bronie/"+removeDiacritics(melee_name.toLowerCase())+".gif");
+		document.getElementById( 'meleelink' ).setAttribute("href", "http://pl.gothic.wikia.com/"+melee_name);
+		curr_inv += "\n\tEquipItem\t(self, "+melee_inst+");";
+	}
+	if (document.getElementById( 'input_ranged' ).value == "NONE")
+	{
+		document.getElementById( 'rangedlink' ).setAttribute("hidden", "");
+		document.getElementById( 'rangedimg' ).setAttribute("hidden", "");
+
+	}else
+	{
+		document.getElementById( 'rangedlink' ).removeAttribute("hidden", "");
+		document.getElementById( 'rangedlink' ).setAttribute("href", "http://pl.gothic.wikia.com/"+ranged_name);
+		document.getElementById( 'rangedimg' ).removeAttribute("hidden", "");
+		document.getElementById( 'rangedimg' ).setAttribute("src", "http://www.gothic.phx.pl/gothic2/dane/bronie/dystansowe/"+removeDiacritics(ranged_name.toLowerCase())+".gif");
+		curr_inv += "\n\tEquipItem\t(self, "+ranged_inst+");";
+	}
+	if (document.getElementById("checkbox-5").checked == true)
+	{
+		curr_inv += "\n\tB_CreateAmbientInv(self);";
+	}	
 	var v1, v2, v3, armorname;
 	if (curr_bodymodel == 1)
 	{ 
@@ -457,7 +492,7 @@ function updateCode()
 	document.getElementById( 'label3' ).innerHTML = "Karnacja: "+currBodyTable[curr_bodytex];
 	document.getElementById( 'label4' ).innerHTML = "Twarz: "+currFaceTable[curr_headtex];
 	document.getElementById( 'label6' ).innerHTML = "Strój: "+armorname;
-	document.getElementById( 'code' ).value = 'instance '+curr_guild+'_'+ curr_id +'_'+curr_name+ '\t(Npc_Default)\n{\n\tname\t= "' +curr_name+ '";\n\tguild\t= GIL_'+curr_guild+';\n\tid\t= '+curr_id+';\n\tvoice\t= '+curr_voice+';\n\tflags\t= '+curr_flags+';\n\tnpctype\t= '+curr_npctype+';\n\t'+curr_att+'\n\tB_SetNpcVisual 	(self, '+v1+', "'+v2+'", '+currFaceTable[curr_headtex]+', '+currBodyTable[curr_bodytex]+', '+v3+');\n\tMdl_SetModelFatness (self, '+document.getElementById("range2").value+');\n};';
+	document.getElementById( 'code' ).value = 'instance '+curr_guild+'_'+ curr_id +'_'+curr_name+ '\t(Npc_Default)\n{\n\tname\t= "' +curr_name+ '";\n\tguild\t= GIL_'+curr_guild+';\n\tid\t= '+curr_id+';\n\tvoice\t= '+curr_voice+';\n\tflags\t= '+curr_flags+';\n\tnpctype\t= '+curr_npctype+';\n\t'+curr_att+curr_inv+'\n\tB_SetNpcVisual 	(self, '+v1+', "'+v2+'", '+currFaceTable[curr_headtex]+', '+currBodyTable[curr_bodytex]+', '+v3+');\n\tMdl_SetModelFatness (self, '+document.getElementById("range2").value+');\n};';
 
 	permalink = [
 		curr_bodymodel, 
